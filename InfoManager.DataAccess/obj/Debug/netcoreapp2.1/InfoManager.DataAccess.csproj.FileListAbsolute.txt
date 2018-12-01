@@ -1,0 +1,9 @@
+C:\Project\InfoManager\InfoManager.DataAccess\bin\Debug\netcoreapp2.1\InfoManager.DataAccess.deps.json
+C:\Project\InfoManager\InfoManager.DataAccess\bin\Debug\netcoreapp2.1\InfoManager.DataAccess.dll
+C:\Project\InfoManager\InfoManager.DataAccess\bin\Debug\netcoreapp2.1\InfoManager.DataAccess.pdb
+C:\Project\InfoManager\InfoManager.DataAccess\obj\Debug\netcoreapp2.1\InfoManager.DataAccess.csproj.CoreCompileInputs.cache
+C:\Project\InfoManager\InfoManager.DataAccess\obj\Debug\netcoreapp2.1\InfoManager.DataAccess.AssemblyInfoInputs.cache
+C:\Project\InfoManager\InfoManager.DataAccess\obj\Debug\netcoreapp2.1\InfoManager.DataAccess.AssemblyInfo.cs
+C:\Project\InfoManager\InfoManager.DataAccess\obj\Debug\netcoreapp2.1\InfoManager.DataAccess.dll
+C:\Project\InfoManager\InfoManager.DataAccess\obj\Debug\netcoreapp2.1\InfoManager.DataAccess.pdb
+C:\Project\InfoManager\InfoManager.DataAccess\obj\Debug\netcoreapp2.1\InfoManager.DataAccess.csprojAssemblyReference.cache
