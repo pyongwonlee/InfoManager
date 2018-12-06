@@ -6,6 +6,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using InfoManager.DataAccess;
+using InfoManager.DataAccess.Contract;
+using InfoManager.DataAccess.Concrete;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace InfoManager.Web
 {
@@ -21,12 +24,18 @@ namespace InfoManager.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddMvcOptions(option => option.OutputFormatters
+                    .Add(new XmlDataContractSerializerOutputFormatter())); ;
+
             services.AddDbContext<InfoManagerContext>(
                 options => options.UseSqlServer(
                     Configuration.GetConnectionString("InfoManagerConnection")
                 )
             );
+
+            services.AddScoped<IBookRepository, BookRepository>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -46,6 +55,8 @@ namespace InfoManager.Web
             {
                 app.UseExceptionHandler("/Error");
             }
+
+            app.UseStatusCodePages();
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
