@@ -16,7 +16,8 @@ namespace InfoManager.DataAccess.Concrete
             this.context = ctx;
         }
 
-        public IEnumerable<Book> Books => this.context.Books.OrderBy(b => b.Author);
+        public IEnumerable<Book> Books => this.context.Books
+            .OrderBy(b => b.Author);
 
         public int TotalCount => this.context.Books.Count();
 
@@ -47,16 +48,16 @@ namespace InfoManager.DataAccess.Concrete
             return book.BookId;
         }
 
+        public void Update(Book book)
+        {
+            this.context.Entry(book).State = EntityState.Modified;
+            this.context.SaveChanges();
+        }
+
         public void Delete(int id)
         {
             var book = this.Find(id);
             this.context.Books.Remove(book);
-            this.context.SaveChanges();
-        }
-
-        public void Update(Book book)
-        {
-            this.context.Entry(book).State = EntityState.Modified;
             this.context.SaveChanges();
         }
 

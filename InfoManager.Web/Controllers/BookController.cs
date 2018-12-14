@@ -28,13 +28,12 @@ namespace InfoManager.Web.Controllers
         {
             searchTerm = string.IsNullOrEmpty(searchTerm) ? "" : searchTerm.Trim();
 
-            var model = new BookIndexResult
+            var model = new DataIndexResult<Book>
             {
                 Success = true,
-                Books = this.repository.GetBooksInPage(searchTerm, page, PAGE_SIZE).ToArray(),
+                Items = this.repository.GetBooksInPage(searchTerm, page, PAGE_SIZE).ToArray(),
                 TotalCount = this.repository.TotalCount,
-                SearchString = searchTerm
-                
+                SearchString = searchTerm                
             };
 
             return Ok(model);

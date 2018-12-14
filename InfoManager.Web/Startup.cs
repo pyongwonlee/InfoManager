@@ -27,7 +27,13 @@ namespace InfoManager.Web
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddMvcOptions(option => option.OutputFormatters
-                    .Add(new XmlDataContractSerializerOutputFormatter())); ;
+                    .Add(new XmlDataContractSerializerOutputFormatter()))
+                .AddJsonOptions(option =>
+                    {
+                        //option.SerializerSettings.PreserveReferencesHandling 
+                        //    = Newtonsoft.Json.PreserveReferencesHandling.None;
+                        option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                    });
 
             services.AddDbContext<InfoManagerContext>(
                 options => options.UseSqlServer(
@@ -35,6 +41,8 @@ namespace InfoManager.Web
                 )
             );
 
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICompanyRepository, CompanyRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
 
             // In production, the React files will be served from this directory
