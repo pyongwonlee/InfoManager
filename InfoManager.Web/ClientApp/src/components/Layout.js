@@ -1,18 +1,13 @@
 import React from 'react';
-import { Col, Grid, Row } from 'react-bootstrap';
 import NavMenu from './NavMenu';
 
 export default props => (
-  <Grid fluid>
-    <Row>
-      <Col sm={3}>
-        <NavMenu />
-      </Col>
-      <Col sm={9}>
-        {props.children}
-        <hr />
-        <p>&copy; 2018 - Personal Information Management by P. Lee</p>
-      </Col>
-    </Row>
-  </Grid>
+  <div className="container-fluid"> 
+    <NavMenu />
+    <div className="mainArea" style={{marginTop: "30px"}}>
+      {props.children}
+      <hr />
+      <p>&copy; 2018 - Personal Information Management by P. Lee</p>
+    </div>
+  </div>
 );
