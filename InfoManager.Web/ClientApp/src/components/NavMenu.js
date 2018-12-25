@@ -47,9 +47,9 @@ export default props => (
             <i className="fas fa-video"></i> Movies
           </a>
           <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a className="dropdown-item" href="/"><i className="fas fa-user"></i> Diirector</a>
+            <a className="dropdown-item" href="/director"><i className="fas fa-user"></i> Diirector</a>
             <div className="dropdown-divider"></div>
-            <a className="dropdown-item" href="/"><i className="fas fa-film"></i> Movies</a>
+            <a className="dropdown-item" href="/movie"><i className="fas fa-film"></i> Movies</a>
           </div>
         </li>
         <li className="nav-item">

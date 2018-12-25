@@ -3,6 +3,7 @@ import { Route, BrowserRouter, Switch } from 'react-router-dom';
 import Layout from './components/Layout';
 import HomePage from './components/Home/HomePage';
 import AboutPage from './components/About/AboutPage';
+import DirectorList from './components/Film/Director/DirectorList';
 import FetchData from './components/FetchData';
 import Login from './components/secure/Login';
 import Logout from './components/secure/Logout';
@@ -15,6 +16,7 @@ export default () => (
         <Switch>
           <Route exact path='/' component={HomePage} />
           <Route path='/about' component={AboutPage} />
+          <Route path='/director' component={DirectorList} />
           <Route path='/fetchdata/:startDateIndex?' component={FetchData} />
           <Route path="/login" component={Login} />
           <Route path="/logout" component={Logout} />
