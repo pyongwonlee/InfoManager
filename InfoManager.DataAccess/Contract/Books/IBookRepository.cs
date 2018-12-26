@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace InfoManager.DataAccess.Contract
+namespace InfoManager.DataAccess.Contract.Books
 {
     public interface IBookRepository : IRepository<Book>
     {

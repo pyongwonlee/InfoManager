@@ -1,7 +1,7 @@
 ﻿using InfoManager.DataAccess.Models;
 using System.Collections.Generic;
 
-namespace InfoManager.DataAccess.Contract
+namespace InfoManager.DataAccess.Contract.Credentials
 {
     public interface ICategoryRepository : IRepository<Category>
     {

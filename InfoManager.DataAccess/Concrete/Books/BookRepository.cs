@@ -1,11 +1,11 @@
-﻿using InfoManager.DataAccess.Contract;
+﻿using InfoManager.DataAccess.Contract.Books;
 using InfoManager.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace InfoManager.DataAccess.Concrete
+namespace InfoManager.DataAccess.Concrete.Books
 {
     public class BookRepository : IBookRepository
     {
@@ -23,6 +23,11 @@ namespace InfoManager.DataAccess.Concrete
 
         public IEnumerable<Book> GetBooksInPage(string searchTerm, int page, int pageSize)
         {
+            if (page < 0 || pageSize < 0)
+            {
+                throw new ArgumentException("Invalid page number or page size");
+            }
+
             return this.context.Books
                 .Where(b =>
                     string.IsNullOrEmpty(searchTerm) ||
@@ -38,6 +43,9 @@ namespace InfoManager.DataAccess.Concrete
             this.context.Books
                 .Where(b => b.Author == author && b.Title == title).Any();
 
+        public bool Exists(int id) =>
+            this.context.Books.Find(id) != null;
+
         public Book Find(int id) => this.context.Books.Find(id);
 
         public int Add(Book book)
@@ -50,6 +58,11 @@ namespace InfoManager.DataAccess.Concrete
 
         public void Update(Book book)
         {
+            if (!this.Exists(book.BookId))
+            {
+                throw new ArgumentException($"Book with Id({book.BookId}) does not exist");
+            }
+
             this.context.Entry(book).State = EntityState.Modified;
             this.context.SaveChanges();
         }
@@ -57,6 +70,11 @@ namespace InfoManager.DataAccess.Concrete
         public void Delete(int id)
         {
             var book = this.Find(id);
+            if (book == null)
+            {
+                throw new ArgumentException($"Book with Id({id}) does not exist");
+            }
+
             this.context.Books.Remove(book);
             this.context.SaveChanges();
         }

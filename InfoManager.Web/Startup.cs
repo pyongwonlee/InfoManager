@@ -6,9 +6,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using InfoManager.DataAccess;
-using InfoManager.DataAccess.Contract;
-using InfoManager.DataAccess.Concrete;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using InfoManager.DataAccess.Contract.Books;
+using InfoManager.DataAccess.Contract.Credentials;
+using InfoManager.DataAccess.Concrete.Credentials;
+using InfoManager.DataAccess.Concrete.Books;
+using InfoManager.DataAccess.Contract.Movies;
+using InfoManager.DataAccess.Concrete.Movies;
 
 namespace InfoManager.Web
 {
@@ -43,6 +47,7 @@ namespace InfoManager.Web
 
             services.AddScoped<ICategoryRepository, CategoryRepository>();
             services.AddScoped<ICompanyRepository, CompanyRepository>();
+            services.AddScoped<IDirectorRepository, DirectorRepository>();
             services.AddScoped<IBookRepository, BookRepository>();
 
             // IIS

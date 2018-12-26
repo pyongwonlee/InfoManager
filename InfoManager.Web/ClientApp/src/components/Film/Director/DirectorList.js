@@ -27,11 +27,13 @@ class DirectorList extends React.Component {
         <div className="row">
           <div className="col-5  offset-1">
             <a className="btn btn-primary" href="/director/create">Create a New Director</a>
-          </div>
-          <div className="col-5 offset-1">
-            <form className="form-inline justfiy-content-right" action="/director/1" method="get">
-              <input name="searchTerm" className="form-control searchTerm" type="search" />
-              <button className="btn btn-info form-control" type="submit"><i className="fa fa-search"></i></button>
+          </div>  
+          <div className="col-5">
+            <form className="form-inline">
+              <div className="text-right" style={{width:"100%"}}>
+                <input name="searchTerm" className="form-control searchTerm" type="search" />
+                <button className="btn btn-info searchBtn" type="submit"><i className="fa fa-search"></i></button>
+              </div>
             </form>
           </div>
         </div>

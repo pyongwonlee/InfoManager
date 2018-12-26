@@ -17,5 +17,14 @@ namespace InfoManager.Web.Models
                 Isbn = arg.Isbn?.Trim()
             };
         }
+
+        public static Director ToDirector(this DirectorArgument arg)
+        {
+            return new Director
+            {
+                Id = arg.Id,
+                Name = arg.Name?.Trim()
+            };
+        }
     }
 }

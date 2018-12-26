@@ -1,19 +1,23 @@
-﻿using InfoManager.DataAccess.Contract.Books;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using InfoManager.DataAccess.Contract.Movies;
 using InfoManager.DataAccess.Models;
 using InfoManager.Web.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 
 namespace InfoManager.Web.Controllers
 {
-    [Route("api/book")]
+    [Route("api/director")]
     [ApiController]
-    public class BookController : ControllerBase
+    public class DirectorController : ControllerBase
     {
-        private IBookRepository repository;
-        private const int PAGE_SIZE = 50;
+        private IDirectorRepository repository;
+        private const int PAGE_SIZE = 20;
 
-        public BookController(IBookRepository repo)
+        public DirectorController(IDirectorRepository repo)
         {
             this.repository = repo;
         }
@@ -24,24 +28,15 @@ namespace InfoManager.Web.Controllers
         {
             searchTerm = string.IsNullOrEmpty(searchTerm) ? "" : searchTerm.Trim();
 
-            var model = new DataIndexResult<Book>
+            var model = new DataIndexResult<Director>
             {
                 Success = true,
-                Items = this.repository.GetBooksInPage(searchTerm, page, PAGE_SIZE).ToArray(),
+                Items = this.repository.GetDirectorsInPage(searchTerm, page, PAGE_SIZE).ToArray(),
                 TotalCount = this.repository.TotalCount,
-                SearchString = searchTerm                
+                SearchString = searchTerm
             };
 
             return Ok(model);
-        }
-
-        [HttpGet]
-        [Route("refresh")]
-        public IActionResult Refresh()
-        {
-            int page = 1;
-            string searchTerm = string.Empty;
-            return Index(page, searchTerm);
         }
 
         [HttpGet]
@@ -56,58 +51,58 @@ namespace InfoManager.Web.Controllers
         [Route("create")]
         public IActionResult Create()
         {
-            var model = new BookResult
+            var model = new DirectorResult
             {
                 Success = true,
-                Book = new Book() { Year = 2000 }
+                Director = new Director() { Name = "" }
             };
             return Ok(model);
         }
 
         [HttpPost]
         [Route("create")]
-        public IActionResult Create([FromBody]BookArgument book)
+        public IActionResult Create([FromBody]DirectorArgument director)
         {
-            if (book == null)
+            if (director == null)
             {
                 return BadRequest();
             }
 
-            var bookData = book.ToBoook();
-            if (!repository.Exists(bookData.Author, bookData.Title))
+            var directorData = director.ToDirector();
+            if (!repository.Exists(directorData.Name))
             {
-                repository.Add(bookData);
+                repository.Add(directorData);
             }
             else
             {
                 // TODO: Add Error
             }
-            return Ok(bookData);
+            return Ok(directorData);
         }
 
         [HttpGet]
         [Route("{id}")]
         public IActionResult Edit(int id)
         {
-            var book = this.repository.Find(id);
-            if (book == null)
+            var director = this.repository.Find(id);
+            if (director == null)
             {
                 return NotFound();
             }
 
-            var result = new BookResult
+            var result = new DirectorResult
             {
                 Success = true,
-                Book = book
+                Director = director
             };
             return Ok(result);
         }
 
         [HttpPut]
         [Route("edit")]
-        public IActionResult Edit([FromBody] BookArgument book)
+        public IActionResult Edit([FromBody] DirectorArgument director)
         {
-            if (book == null)
+            if (director == null)
             {
                 return BadRequest();
             }
@@ -117,28 +112,28 @@ namespace InfoManager.Web.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (this.repository.Find(book.BookId) == null)
+            if (this.repository.Find(director.Id) == null)
             {
                 // TODO: Add Error
             }
 
-            var bookData = book.ToBoook();
-            this.repository.Update(bookData);
+            var directorData = director.ToDirector();
+            this.repository.Update(directorData);
 
-            return Ok(bookData);
+            return Ok(directorData);
         }
 
         [HttpGet]
         [Route("delete")]
         public IActionResult Delete(int id)
         {
-            var book = this.repository.Find(id);
-            if (book == null)
+            var director = this.repository.Find(id);
+            if (director == null)
             {
                 return NotFound();
             }
 
-            return Ok(book);
+            return Ok(director);
         }
 
         [HttpDelete]

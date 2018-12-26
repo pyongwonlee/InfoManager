@@ -1,11 +1,11 @@
-﻿using InfoManager.DataAccess.Contract;
+﻿using InfoManager.DataAccess.Contract.Credentials;
 using InfoManager.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace InfoManager.DataAccess.Concrete
+namespace InfoManager.DataAccess.Concrete.Credentials
 {
     public class CategoryRepository : ICategoryRepository
     {
@@ -58,6 +58,9 @@ namespace InfoManager.DataAccess.Concrete
         public bool Exists(string name) => this.context.Categories
             .Where(d => d.Name == name).Any();
 
+        public bool Exists(int id) =>
+            this.context.Categories.Find(id) != null;
+
         public int Add(Category category)
         {
             this.context.Categories.Add(category);
@@ -68,6 +71,11 @@ namespace InfoManager.DataAccess.Concrete
 
         public void Update(Category category)
         {
+            if (!this.Exists(category.CategoryId))
+            {
+                throw new ArgumentException($"Category with Id({category.CategoryId}) does not exist");
+            }
+
             this.context.Entry(category).State = EntityState.Modified;
             this.context.SaveChanges();
         }
@@ -75,6 +83,11 @@ namespace InfoManager.DataAccess.Concrete
         public void Delete(int id)
         {
             var category = Find(id);
+            if (category == null)
+            {
+                throw new ArgumentException($"Category with Id({id}) does not exist");
+            }
+
             this.context.Categories.Remove(category);
             this.context.SaveChanges();
         }

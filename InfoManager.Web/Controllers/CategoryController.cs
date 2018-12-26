@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using InfoManager.DataAccess.Contract;
-using InfoManager.DataAccess.Models;
+﻿using InfoManager.DataAccess.Contract.Credentials;
 using InfoManager.Web.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
 
 namespace InfoManager.Web.Controllers
 {

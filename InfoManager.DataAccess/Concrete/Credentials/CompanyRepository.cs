@@ -1,11 +1,11 @@
-﻿using InfoManager.DataAccess.Contract;
+﻿using InfoManager.DataAccess.Contract.Credentials;
 using InfoManager.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace InfoManager.DataAccess.Concrete
+namespace InfoManager.DataAccess.Concrete.Credentials
 {
     public class CompanyRepository : ICompanyRepository
     {
@@ -42,6 +42,11 @@ namespace InfoManager.DataAccess.Concrete
         
         public IEnumerable<Company> GetCompaniesInPage(string searchTerm, int page, int pageSize)
         {
+            if (page < 0 || pageSize < 0)
+            {
+                throw new ArgumentException("Invalid page number or page size");
+            }
+
             return this.context.Companies
                 .Where(c =>
                     string.IsNullOrEmpty(searchTerm) ||
@@ -55,6 +60,9 @@ namespace InfoManager.DataAccess.Concrete
         public bool Exists(string name) => this.context.Companies
             .Where(d => d.Name == name).Any();
 
+        public bool Exists(int id) =>
+            this.context.Companies.Find(id) != null;
+
         public int Add(Company company)
         {
             this.context.Companies.Add(company);
@@ -65,6 +73,11 @@ namespace InfoManager.DataAccess.Concrete
 
         public void Update(Company company)
         {
+            if (!this.Exists(company.CompanyId))
+            {
+                throw new ArgumentException($"Company with Id({company.CompanyId}) does not exist");
+            }
+
             this.context.Entry(company).State = EntityState.Modified;
             this.context.SaveChanges();
         }
@@ -72,6 +85,11 @@ namespace InfoManager.DataAccess.Concrete
         public void Delete(int id)
         {
             var company = Find(id);
+            if (company == null)
+            {
+                throw new ArgumentException($"Company with Id({id}) does not exist");
+            }
+
             this.context.Companies.Remove(company);
             this.context.SaveChanges();
         }
