@@ -14,6 +14,6 @@ namespace InfoManager.DataAccess.Models
         public string Name { get; set; }
         public string Abbreviation { get; set; }
 
-        public ICollection<City> Cities { get; set; }
+        public virtual ICollection<City> Cities { get; set; }
     }
 }

@@ -27,6 +27,14 @@ namespace InfoManager.DataAccess.Concrete.Credentials
  
         public Company Find(int id) => context.Companies.Find(id);
 
+        public Company Get(int id)
+        {
+            return this.context.Companies
+                .Include(c => c.Category)
+                .Where(c => c.CompanyId == id)
+                .SingleOrDefault();
+        }
+
         public IEnumerable<Company> GetCompaniesByCategory(int categoryId)
         {
             if (categoryId < 0)

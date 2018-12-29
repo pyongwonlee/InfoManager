@@ -1,12 +1,14 @@
-﻿using InfoManager.DataAccess.Contract.Books;
+﻿using AutoMapper;
+using InfoManager.DataAccess.Contract.Books;
 using InfoManager.DataAccess.Models;
 using InfoManager.Web.Models;
+using InfoManager.Web.Models.Books;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
 namespace InfoManager.Web.Controllers
 {
-    [Route("api/book")]
+    [Route("api/books")]
     [ApiController]
     public class BookController : ControllerBase
     {
@@ -19,12 +21,11 @@ namespace InfoManager.Web.Controllers
         }
 
         [HttpGet]
-        [Route("")]
-        public IActionResult Index(int page = 1, string searchTerm = "")
+        public IActionResult GetBooks(int page = 1, string searchTerm = "")
         {
             searchTerm = string.IsNullOrEmpty(searchTerm) ? "" : searchTerm.Trim();
 
-            var model = new DataIndexResult<Book>
+            var model = new ListResult<Book>
             {
                 Success = true,
                 Items = this.repository.GetBooksInPage(searchTerm, page, PAGE_SIZE).ToArray(),
@@ -32,34 +33,31 @@ namespace InfoManager.Web.Controllers
                 SearchString = searchTerm                
             };
 
-            return Ok(model);
+            return Ok(model); // 200
         }
 
-        [HttpGet]
-        [Route("refresh")]
+        [HttpGet("refresh")]
         public IActionResult Refresh()
         {
             int page = 1;
             string searchTerm = string.Empty;
-            return Index(page, searchTerm);
+            return GetBooks(page, searchTerm);
         }
 
-        [HttpGet]
-        [Route("search")]
+        [HttpGet("search")]
         public IActionResult Search(string searchTerm = "")
         {
             int page = 1;
-            return Index(page, searchTerm);
+            return GetBooks(page, searchTerm);
         }
 
-        [HttpGet]
-        [Route("create")]
+        [HttpGet("create")]
         public IActionResult Create()
         {
-            var model = new BookResult
+            var model = new DataResult<BookResult>
             {
                 Success = true,
-                Book = new Book() { Year = 2000 }
+                Item = new BookResult() { Year = 2000 }
             };
             return Ok(model);
         }
@@ -73,7 +71,7 @@ namespace InfoManager.Web.Controllers
                 return BadRequest();
             }
 
-            var bookData = book.ToBoook();
+            var bookData = Mapper.Map<Book>(book);
             if (!repository.Exists(bookData.Author, bookData.Title))
             {
                 repository.Add(bookData);
@@ -82,25 +80,24 @@ namespace InfoManager.Web.Controllers
             {
                 // TODO: Add Error
             }
-            return Ok(bookData);
+            return Ok(bookData); 
         }
 
-        [HttpGet]
-        [Route("{id}")]
-        public IActionResult Edit(int id)
+        [HttpGet("{id}")]
+        public IActionResult GetBook(int id)
         {
             var book = this.repository.Find(id);
             if (book == null)
             {
-                return NotFound();
+                return NotFound(); // 404
             }
 
-            var result = new BookResult
+            var result = new DataResult<BookResult>
             {
                 Success = true,
-                Book = book
+                Item = Mapper.Map<BookResult>(book)
             };
-            return Ok(result);
+            return Ok(result); // 200
         }
 
         [HttpPut]
@@ -122,7 +119,7 @@ namespace InfoManager.Web.Controllers
                 // TODO: Add Error
             }
 
-            var bookData = book.ToBoook();
+            var bookData = Mapper.Map<Book>(book);
             this.repository.Update(bookData);
 
             return Ok(bookData);
@@ -135,7 +132,7 @@ namespace InfoManager.Web.Controllers
             var book = this.repository.Find(id);
             if (book == null)
             {
-                return NotFound();
+                return NotFound(); // 404
             }
 
             return Ok(book);

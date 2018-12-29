@@ -1,30 +1,38 @@
 ﻿using InfoManager.DataAccess.Models;
+using InfoManager.Web.Models.Books;
+using InfoManager.Web.Models.Credentials;
+using InfoManager.Web.Models.Movies;
 
 namespace InfoManager.Web.Models
 {
     public static class DataConversion
     {
-        public static Book ToBoook(this BookArgument arg)
+        public static void Init()
         {
-            return new Book
+            AutoMapper.Mapper.Initialize(cfg =>
             {
-                BookId = arg.BookId,
-                Author = arg.Author?.Trim(),
-                Title = arg.Title?.Trim(),
-                Year = arg.Year,
-                Publisher = arg.Publisher?.Trim(),
-                Location = arg.Location?.Trim(),
-                Isbn = arg.Isbn?.Trim()
-            };
-        }
+                cfg.CreateMap<string, string>()
+                    .ConvertUsing(str => !string.IsNullOrEmpty(str) ? str.Trim() : null);
 
-        public static Director ToDirector(this DirectorArgument arg)
-        {
-            return new Director
-            {
-                Id = arg.Id,
-                Name = arg.Name?.Trim()
-            };
+                // Books
+                cfg.CreateMap<BookArgument, Book>();
+                cfg.CreateMap<Book, BookResult>();
+
+                // Movies
+                cfg.CreateMap<DirectorArgument, Director>();
+                cfg.CreateMap<Movie, DirectorResult.Movie>();
+                cfg.CreateMap<Director, DirectorResult>();
+
+                // Credentials
+                cfg.CreateMap<Company, CategoryResult.Company>();
+                cfg.CreateMap<Category, CategoryResult>();
+
+                cfg.CreateMap<Company, CompanyResult>()
+                    .ForMember(
+                        dest => dest.CategoryName,
+                        opts => opts.MapFrom(src => src.Category.Name)
+                    );
+            });
         }
     }
 }

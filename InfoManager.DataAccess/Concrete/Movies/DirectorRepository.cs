@@ -29,7 +29,7 @@ namespace InfoManager.DataAccess.Concrete.Movies
                 throw new ArgumentException("Invalid page number or page size");
             }
 
-            return this.context.Directors
+            var directors = this.context.Directors
                 .Where(d =>
                     string.IsNullOrEmpty(searchTerm) ||
                     d.Name.ToLower().Contains(searchTerm.ToLower()))
@@ -37,6 +37,13 @@ namespace InfoManager.DataAccess.Concrete.Movies
                 .OrderBy(d => d.Name)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize);
+
+            foreach (var director in directors)
+            {
+                director.Movies = director.Movies.OrderBy(c => c.Title).ToArray();
+            }
+
+            return directors;
         }
 
         public bool Exists(string name) => 
@@ -51,6 +58,14 @@ namespace InfoManager.DataAccess.Concrete.Movies
             this.context.Directors.Find(id) != null;
 
         public Director Find(int id) => this.context.Directors.Find(id);
+
+        public Director Get(int id)
+        {
+            return this.context.Directors
+                .Include(d => d.Movies)
+                .Where(d => d.Id == id)
+                .SingleOrDefault();
+        }
 
         public int Add(Director director)
         {

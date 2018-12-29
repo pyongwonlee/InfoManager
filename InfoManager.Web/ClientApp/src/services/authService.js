@@ -1,13 +1,13 @@
 const authService = {
-  isAuthenticated () {
+  isAuthenticated: function() {
     return true;
   },
 
-  signIn(cb) {
+  signIn: function(cb) {
     setTimeout(cb, 100);
   },
 
-  signOut(cb) {
+  signOut: function(cb) {
     setTimeout(cb, 100);
   }
 };

@@ -1,11 +1,14 @@
-﻿using InfoManager.DataAccess.Contract.Credentials;
+﻿using AutoMapper;
+using InfoManager.DataAccess.Contract.Credentials;
 using InfoManager.Web.Models;
+using InfoManager.Web.Models.Credentials;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace InfoManager.Web.Controllers
 {
-    [Route("api/category")]
+    [Route("api/categories")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -17,31 +20,35 @@ namespace InfoManager.Web.Controllers
         }
 
         [HttpGet]
-        [Route("")]
-        public ActionResult Index()
+        public ActionResult GetCategories()
         {
-            var model = new DataIndexResult<CategoryResult>
+            var model = new ListResult<CategoryResult>
             {
                 Success = true,
-                Items = this.repository.Categories
-                    .Select(c => new CategoryResult
-                    {
-                        CategoryId = c.CategoryId,
-                        Name = c.Name,
-                        Companies = c.Companies
-                            .Select(company => new CategoryResult.Company
-                            {
-                                CompanyId = company.CompanyId,
-                                Name = company.Name
-                            })
-                            .ToArray()
-                    })
+                Items = Mapper.Map<IEnumerable<CategoryResult>>(this.repository.Categories)
                     .ToArray(),
                 TotalCount = this.repository.TotalCount,
                 SearchString = ""
             };
 
-            return Ok(model);
+            return Ok(model); // 200
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetCategory(int id)
+        {
+            var category = this.repository.Get(id);
+            if (category == null)
+            {
+                return NotFound(); // 404
+            }
+
+            var result = new DataResult<CategoryResult>
+            {
+                Success = true,
+                Item = Mapper.Map<CategoryResult>(category)
+            };
+            return Ok(result); // 200
         }
     }
 }

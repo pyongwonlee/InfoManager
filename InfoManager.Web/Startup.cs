@@ -13,6 +13,8 @@ using InfoManager.DataAccess.Concrete.Credentials;
 using InfoManager.DataAccess.Concrete.Books;
 using InfoManager.DataAccess.Contract.Movies;
 using InfoManager.DataAccess.Concrete.Movies;
+using InfoManager.Web.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace InfoManager.Web
 {
@@ -72,8 +74,17 @@ namespace InfoManager.Web
             }
             else
             {
-                app.UseExceptionHandler("/Error");
+                app.UseExceptionHandler(appBuilder =>
+                {
+                    appBuilder.Run(async context =>
+                    {
+                        context.Response.StatusCode = 500;
+                        await context.Response.WriteAsync("Unexpected Error happened. Try again later");
+                    });
+                });
             }
+
+            DataConversion.Init();
 
             app.UseStatusCodePages();
 

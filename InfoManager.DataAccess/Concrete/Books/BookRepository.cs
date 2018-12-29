@@ -48,6 +48,13 @@ namespace InfoManager.DataAccess.Concrete.Books
 
         public Book Find(int id) => this.context.Books.Find(id);
 
+        public Book Get(int id)
+        {
+            return this.context.Books
+                .Where(b => b.BookId == id)
+                .SingleOrDefault();
+        }
+
         public int Add(Book book)
         {
             this.context.Books.Add(book);

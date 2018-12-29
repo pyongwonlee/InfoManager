@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using InfoManager.DataAccess.Contract.Movies;
 using InfoManager.DataAccess.Models;
 using InfoManager.Web.Models;
-using Microsoft.AspNetCore.Http;
+using InfoManager.Web.Models.Movies;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace InfoManager.Web.Controllers
 {
-    [Route("api/director")]
+    [Route("api/directors")]
     [ApiController]
     public class DirectorController : ControllerBase
     {
@@ -23,38 +22,41 @@ namespace InfoManager.Web.Controllers
         }
 
         [HttpGet]
-        [Route("")]
-        public IActionResult Index(int page = 1, string searchTerm = "")
+        public IActionResult GetDirectors(int page = 1, string searchTerm = "")
         {
             searchTerm = string.IsNullOrEmpty(searchTerm) ? "" : searchTerm.Trim();
 
-            var model = new DataIndexResult<Director>
+            var model = new ListResult<DirectorResult>
             {
                 Success = true,
-                Items = this.repository.GetDirectorsInPage(searchTerm, page, PAGE_SIZE).ToArray(),
+                Items = Mapper.Map<IEnumerable<DirectorResult>>(this.repository.GetDirectorsInPage(searchTerm, page, PAGE_SIZE))
+                    .ToArray(),
                 TotalCount = this.repository.TotalCount,
                 SearchString = searchTerm
             };
 
-            return Ok(model);
+            return Ok(model); // Status 200
         }
 
-        [HttpGet]
-        [Route("search")]
+        [HttpGet("search")]
         public IActionResult Search(string searchTerm = "")
         {
             int page = 1;
-            return Index(page, searchTerm);
+            return GetDirectors(page, searchTerm);
         }
 
-        [HttpGet]
-        [Route("create")]
+        [HttpGet("create")]
         public IActionResult Create()
         {
-            var model = new DirectorResult
+            var model = new DataResult<DirectorResult>
             {
                 Success = true,
-                Director = new Director() { Name = "" }
+                Item = new DirectorResult
+                {
+                    Id = 0,
+                    Name = string.Empty,
+                    Movies = new DirectorResult.Movie[] { }
+                }
             };
             return Ok(model);
         }
@@ -68,7 +70,7 @@ namespace InfoManager.Web.Controllers
                 return BadRequest();
             }
 
-            var directorData = director.ToDirector();
+            var directorData = Mapper.Map<Director>(director);
             if (!repository.Exists(directorData.Name))
             {
                 repository.Add(directorData);
@@ -80,22 +82,21 @@ namespace InfoManager.Web.Controllers
             return Ok(directorData);
         }
 
-        [HttpGet]
-        [Route("{id}")]
-        public IActionResult Edit(int id)
+        [HttpGet("{id}")]
+        public IActionResult GetDirector(int id)
         {
-            var director = this.repository.Find(id);
+            var director = this.repository.Get(id);
             if (director == null)
             {
-                return NotFound();
+                return NotFound(); // 404
             }
 
-            var result = new DirectorResult
+            var result = new DataResult<DirectorResult>
             {
                 Success = true,
-                Director = director
+                Item = Mapper.Map<DirectorResult>(director)
             };
-            return Ok(result);
+            return Ok(result); // 200
         }
 
         [HttpPut]
@@ -117,7 +118,7 @@ namespace InfoManager.Web.Controllers
                 // TODO: Add Error
             }
 
-            var directorData = director.ToDirector();
+            var directorData = Mapper.Map<Director>(director);
             this.repository.Update(directorData);
 
             return Ok(directorData);
@@ -130,7 +131,7 @@ namespace InfoManager.Web.Controllers
             var director = this.repository.Find(id);
             if (director == null)
             {
-                return NotFound();
+                return NotFound(); // 404
             }
 
             return Ok(director);

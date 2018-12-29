@@ -15,6 +15,6 @@ namespace InfoManager.DataAccess.Models
         public int ProvinceId { get; set; }
 
         public Province Province { get; set; }
-        public ICollection<Center> Centers { get; set; }
+        public virtual ICollection<Center> Centers { get; set; }
     }
 }

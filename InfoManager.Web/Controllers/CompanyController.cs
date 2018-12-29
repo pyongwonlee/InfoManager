@@ -1,12 +1,14 @@
-﻿using InfoManager.DataAccess.Contract.Credentials;
-using InfoManager.DataAccess.Models;
+﻿using AutoMapper;
+using InfoManager.DataAccess.Contract.Credentials;
 using InfoManager.Web.Models;
+using InfoManager.Web.Models.Credentials;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace InfoManager.Web.Controllers
 {
-    [Route("api/company")]
+    [Route("api/companies")]
     [ApiController]
     public class CompanyController : ControllerBase
     {
@@ -19,20 +21,37 @@ namespace InfoManager.Web.Controllers
         }
 
         [HttpGet]
-        [Route("")]
-        public ActionResult Index(int page = 1)
+        public ActionResult GetCompanies(int page = 1)
         {
             string searchTerm = string.Empty;
 
-            var model = new DataIndexResult<Company>
+            var model = new ListResult<CompanyResult>
             {
                 Success = true,
-                Items = this.repository.GetCompaniesInPage(searchTerm, page, PAGE_SIZE).ToArray(),
+                Items = Mapper.Map<IEnumerable<CompanyResult>>(this.repository.GetCompaniesInPage(searchTerm, page, PAGE_SIZE))
+                    .ToArray(),
                 TotalCount = this.repository.TotalCount,
                 SearchString = searchTerm
             };
 
-            return Ok(model);
+            return Ok(model); // 200
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetCompany(int id)
+        {
+            var company = this.repository.Get(id);
+            if (company == null)
+            {
+                return NotFound(); // 404
+            }
+
+            var result = new DataResult<CompanyResult>
+            {
+                Success = true,
+                Item = Mapper.Map<CompanyResult>(company)
+            };
+            return Ok(result); // 200
         }
     }
 }

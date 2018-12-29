@@ -17,6 +17,6 @@ namespace InfoManager.DataAccess.Models
         public int CategoryId { get; set; }
 
         public Category Category { get; set; }
-        public ICollection<Password> Passwords { get; set; }
+        public virtual ICollection<Password> Passwords { get; set; }
     }
 }

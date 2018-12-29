@@ -6,6 +6,7 @@ namespace InfoManager.DataAccess.Contract
     {
         int TotalCount { get; }
         T Find(int id);
+        T Get(int id);
         bool Exists(int id);
 
         int Add(T item);

@@ -16,9 +16,22 @@ namespace InfoManager.DataAccess.Concrete.Credentials
             this.context = ctx;
         }
 
-        public IEnumerable<Category> Categories => this.context.Categories
-            .Include(c => c.Companies)
-            .OrderBy(c => c.Name);
+        public IEnumerable<Category> Categories
+        {
+            get
+            {
+                var categories = this.context.Categories
+                    .Include(c => c.Companies)
+                    .OrderBy(c => c.Name);
+                
+                foreach(var category in categories)
+                {
+                    category.Companies = category.Companies.OrderBy(c => c.Name).ToArray();
+                }
+
+                return categories;
+            }
+        }
 
         public int TotalCount => this.context.Categories.Count();
 
@@ -36,6 +49,14 @@ namespace InfoManager.DataAccess.Concrete.Credentials
         }
 
         public Category Find(int id) => this.context.Categories.Find(id);
+
+        public Category Get(int id)
+        {
+            return this.context.Categories
+                .Include(c => c.Companies)
+                .Where(c => c.CategoryId == id)
+                .SingleOrDefault();
+        }
 
         public int GetCategoryId(string name)
         {

@@ -1,8 +1,6 @@
-﻿using System.Collections.Generic;
-
-namespace InfoManager.Web.Models
+﻿namespace InfoManager.Web.Models.Credentials
 {
-    public class CategoryResult : ResultBase
+    public class CategoryResult
     {
         public int CategoryId { get; set; }
         public string Name { get; set; }

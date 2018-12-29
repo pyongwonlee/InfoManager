@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace InfoManager.Web.Models
+namespace InfoManager.Web.Models.Books
 {
     public class BookArgument
     {
