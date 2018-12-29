@@ -3,13 +3,13 @@ using InfoManager.DataAccess.Contract.Movies;
 using InfoManager.DataAccess.Models;
 using InfoManager.Web.Models;
 using InfoManager.Web.Models.Movies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace InfoManager.Web.Controllers
 {
-    [Route("api/directors")]
     [ApiController]
     public class DirectorController : ControllerBase
     {
@@ -21,7 +21,7 @@ namespace InfoManager.Web.Controllers
             this.repository = repo;
         }
 
-        [HttpGet]
+        [HttpGet("api/directors")]
         public IActionResult GetDirectors(int page = 1, string searchTerm = "")
         {
             searchTerm = string.IsNullOrEmpty(searchTerm) ? "" : searchTerm.Trim();
@@ -38,14 +38,14 @@ namespace InfoManager.Web.Controllers
             return Ok(model); // Status 200
         }
 
-        [HttpGet("search")]
+        [HttpGet("api/directors/search")]
         public IActionResult Search(string searchTerm = "")
         {
             int page = 1;
             return GetDirectors(page, searchTerm);
         }
 
-        [HttpGet("create")]
+        [HttpGet("api/directors/create")]
         public IActionResult Create()
         {
             var model = new DataResult<DirectorResult>
@@ -61,28 +61,27 @@ namespace InfoManager.Web.Controllers
             return Ok(model);
         }
 
-        [HttpPost]
-        [Route("create")]
+        [HttpPost("api/directors")]
         public IActionResult Create([FromBody]DirectorArgument director)
         {
             if (director == null)
             {
-                return BadRequest();
+                return BadRequest(); // 400
             }
 
             var directorData = Mapper.Map<Director>(director);
-            if (!repository.Exists(directorData.Name))
+            if (repository.Exists(directorData.Name))
             {
-                repository.Add(directorData);
+                return new StatusCodeResult(StatusCodes.Status409Conflict); // 409: already exists
             }
-            else
-            {
-                // TODO: Add Error
-            }
-            return Ok(directorData);
+
+            repository.Add(directorData);
+            var result = Mapper.Map<DirectorResult>(directorData);
+
+            return CreatedAtRoute("GetDirector", new { Id = result.Id }, result); // 201
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("api/directors/{id}", Name = "GetDirector")]
         public IActionResult GetDirector(int id)
         {
             var director = this.repository.Get(id);
@@ -99,23 +98,22 @@ namespace InfoManager.Web.Controllers
             return Ok(result); // 200
         }
 
-        [HttpPut]
-        [Route("edit")]
+        [HttpPut("api/directors")]
         public IActionResult Edit([FromBody] DirectorArgument director)
         {
             if (director == null)
             {
-                return BadRequest();
+                return BadRequest(); // 400
             }
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState);  // 400
             }
 
             if (this.repository.Find(director.Id) == null)
             {
-                // TODO: Add Error
+                return NotFound(); // 404
             }
 
             var directorData = Mapper.Map<Director>(director);
@@ -124,8 +122,7 @@ namespace InfoManager.Web.Controllers
             return Ok(directorData);
         }
 
-        [HttpGet]
-        [Route("delete")]
+        [HttpGet("api/directors/delete")]
         public IActionResult Delete(int id)
         {
             var director = this.repository.Find(id);
@@ -137,13 +134,12 @@ namespace InfoManager.Web.Controllers
             return Ok(director);
         }
 
-        [HttpDelete]
-        [Route("")]
+        [HttpDelete("api/directors")]
         public IActionResult DeleteConfirm(int id)
         {
             if (this.repository.Find(id) == null)
             {
-                // TODO: Add Error                
+                return NotFound(); // 404             
             }
 
             this.repository.Delete(id);

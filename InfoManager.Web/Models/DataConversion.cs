@@ -24,8 +24,10 @@ namespace InfoManager.Web.Models
                 cfg.CreateMap<Director, DirectorResult>();
 
                 // Credentials
+                cfg.CreateMap<CategoryArgument, Category>();
                 cfg.CreateMap<Company, CategoryResult.Company>();
                 cfg.CreateMap<Category, CategoryResult>();
+                cfg.CreateMap<CompanyArgument, Company>();
 
                 cfg.CreateMap<Company, CompanyResult>()
                     .ForMember(

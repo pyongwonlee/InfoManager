@@ -3,12 +3,12 @@ using InfoManager.DataAccess.Contract.Books;
 using InfoManager.DataAccess.Models;
 using InfoManager.Web.Models;
 using InfoManager.Web.Models.Books;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
 namespace InfoManager.Web.Controllers
 {
-    [Route("api/books")]
     [ApiController]
     public class BookController : ControllerBase
     {
@@ -20,7 +20,7 @@ namespace InfoManager.Web.Controllers
             this.repository = repo;
         }
 
-        [HttpGet]
+        [HttpGet("api/books")]
         public IActionResult GetBooks(int page = 1, string searchTerm = "")
         {
             searchTerm = string.IsNullOrEmpty(searchTerm) ? "" : searchTerm.Trim();
@@ -36,7 +36,7 @@ namespace InfoManager.Web.Controllers
             return Ok(model); // 200
         }
 
-        [HttpGet("refresh")]
+        [HttpGet("api/books/refresh")]
         public IActionResult Refresh()
         {
             int page = 1;
@@ -44,14 +44,14 @@ namespace InfoManager.Web.Controllers
             return GetBooks(page, searchTerm);
         }
 
-        [HttpGet("search")]
+        [HttpGet("api/books/search")]
         public IActionResult Search(string searchTerm = "")
         {
             int page = 1;
             return GetBooks(page, searchTerm);
         }
 
-        [HttpGet("create")]
+        [HttpGet("api/books/create")]
         public IActionResult Create()
         {
             var model = new DataResult<BookResult>
@@ -62,28 +62,27 @@ namespace InfoManager.Web.Controllers
             return Ok(model);
         }
 
-        [HttpPost]
-        [Route("create")]
+        [HttpPost("api/books")]
         public IActionResult Create([FromBody]BookArgument book)
         {
             if (book == null)
             {
-                return BadRequest();
+                return BadRequest(); // 400
             }
 
             var bookData = Mapper.Map<Book>(book);
-            if (!repository.Exists(bookData.Author, bookData.Title))
+            if (repository.Exists(bookData.Author, bookData.Title))
             {
-                repository.Add(bookData);
+                return new StatusCodeResult(StatusCodes.Status409Conflict); // 409: already exists
             }
-            else
-            {
-                // TODO: Add Error
-            }
-            return Ok(bookData); 
+
+            repository.Add(bookData);
+            var result = Mapper.Map<BookResult>(book);
+
+            return CreatedAtRoute("GetBook", new { Id = result.BookId }, result); // 201
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("api/books/{id}", Name = "GetBook")]
         public IActionResult GetBook(int id)
         {
             var book = this.repository.Find(id);
@@ -101,22 +100,22 @@ namespace InfoManager.Web.Controllers
         }
 
         [HttpPut]
-        [Route("edit")]
+        [Route("api/books")]
         public IActionResult Edit([FromBody] BookArgument book)
         {
             if (book == null)
             {
-                return BadRequest();
+                return BadRequest(); // 400
             }
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return BadRequest(ModelState); // 400
             }
 
             if (this.repository.Find(book.BookId) == null)
             {
-                // TODO: Add Error
+                return NotFound(); // 404
             }
 
             var bookData = Mapper.Map<Book>(book);
@@ -126,7 +125,7 @@ namespace InfoManager.Web.Controllers
         }
 
         [HttpGet]
-        [Route("delete")]
+        [Route("api/books/delete")]
         public IActionResult Delete(int id)
         {
             var book = this.repository.Find(id);
@@ -139,12 +138,12 @@ namespace InfoManager.Web.Controllers
         }
 
         [HttpDelete]
-        [Route("")]
+        [Route("api/books")]
         public IActionResult DeleteConfirm(int id)
         {
             if (this.repository.Find(id) == null)
             {
-                // TODO: Add Error                
+                return NotFound(); // 404              
             }
 
             this.repository.Delete(id);
