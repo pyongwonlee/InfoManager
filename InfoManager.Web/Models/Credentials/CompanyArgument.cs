@@ -4,8 +4,6 @@ namespace InfoManager.Web.Models.Credentials
 {
     public class CompanyArgument
     {
-        public int CompanyId { get; set; }
-
         [Required(ErrorMessage = "Company Name is required")]
         [MaxLength(250, ErrorMessage = "Comapny Name cannot exceeds 250 characters")]
         public string Name { get; set; }

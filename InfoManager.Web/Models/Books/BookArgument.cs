@@ -4,8 +4,6 @@ namespace InfoManager.Web.Models.Books
 {
     public class BookArgument
     {
-        public int BookId { get; set; }
-
         [Required(ErrorMessage = "Book Author is required")]
         [MaxLength(250, ErrorMessage = "Book Author cannot exceeds 250 characters")]
         public string Author { get; set; }

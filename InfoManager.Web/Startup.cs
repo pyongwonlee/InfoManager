@@ -32,8 +32,13 @@ namespace InfoManager.Web
         {
             services.AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                .AddMvcOptions(option => option.OutputFormatters
-                    .Add(new XmlDataContractSerializerOutputFormatter()))
+                .AddMvcOptions(option => 
+                    {
+                        option.OutputFormatters
+                            .Add(new XmlDataContractSerializerOutputFormatter());
+                        option.InputFormatters
+                            .Add(new XmlDataContractSerializerInputFormatter(option));
+                    })
                 .AddJsonOptions(option =>
                     {
                         //option.SerializerSettings.PreserveReferencesHandling 

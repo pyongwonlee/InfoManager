@@ -11,6 +11,7 @@ using System.Linq;
 namespace InfoManager.Web.Controllers
 {
     [ApiController]
+    [Route("api/categories")]
     public class CategoryController : ControllerBase
     {
         private ICategoryRepository repository;
@@ -20,7 +21,7 @@ namespace InfoManager.Web.Controllers
             this.repository = repo;
         }
 
-        [HttpGet("api/categories")]
+        [HttpGet]
         public ActionResult GetCategories()
         {
             var model = new ListResult<CategoryResult>
@@ -35,7 +36,7 @@ namespace InfoManager.Web.Controllers
             return Ok(model); // 200
         }
 
-        [HttpGet("api/categories/create")]
+        [HttpGet("create")]
         public IActionResult Create()
         {
             var model = new DataResult<CategoryResult>
@@ -50,17 +51,17 @@ namespace InfoManager.Web.Controllers
             return Ok(model);
         }
 
-        [HttpPost("api/categories")]
+        [HttpPost]
         public IActionResult Create([FromBody]CategoryArgument category)
         {
             if (category == null)
             {
-                return BadRequest(); // 400
+                return BadRequest(ResultBase.ErrorResult("Category is null")); // 400
             }
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);  // 400
+                return BadRequest(ResultBase.ErrorResult(ModelState));  // 400
             }
 
             var categoryData = Mapper.Map<Category>(category);
@@ -75,7 +76,7 @@ namespace InfoManager.Web.Controllers
             return CreatedAtRoute("GetCategory", new { Id = result.CategoryId }, result); // 201
         }
 
-        [HttpGet("api/categories/{id}", Name = "GetCategory")]
+        [HttpGet("{id}", Name = "GetCategory")]
         public IActionResult GetCategory(int id)
         {
             var category = this.repository.Get(id);
@@ -92,31 +93,32 @@ namespace InfoManager.Web.Controllers
             return Ok(result); // 200
         }
 
-        [HttpPut("api/categories")]
-        public IActionResult Edit([FromBody] CategoryArgument category)
+        [HttpPut("{id}")]
+        public IActionResult Edit(int id, [FromBody] CategoryArgument category)
         {
             if (category == null)
             {
-                return BadRequest(); // 400
+                return BadRequest(ResultBase.ErrorResult("Category is null")); // 400
             }
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);  // 400
+                return BadRequest(ResultBase.ErrorResult(ModelState));  // 400
             }
 
-            if (this.repository.Find(category.CategoryId) == null)
+            if (this.repository.Find(id) == null)
             {
                 return NotFound(); // 404
             }
 
             var categoryData = Mapper.Map<Category>(category);
+            categoryData.CategoryId = id;
             this.repository.Update(categoryData);
 
             return Ok(categoryData);
         }
 
-        [HttpGet("api/categories/delete")]
+        [HttpGet("delete")]
         public IActionResult Delete(int id)
         {
             var category = this.repository.Find(id);
@@ -128,7 +130,7 @@ namespace InfoManager.Web.Controllers
             return Ok(category);
         }
 
-        [HttpDelete("api/categories")]
+        [HttpDelete("{id}")]
         public IActionResult DeleteConfirm(int id)
         {
             if (this.repository.Find(id) == null)
@@ -137,11 +139,8 @@ namespace InfoManager.Web.Controllers
             }
 
             this.repository.Delete(id);
-            var result = new ResultBase
-            {
-                Success = true
-            };
-            return Ok(result);
+
+            return NoContent(); // 204
         }
     }
 }

@@ -11,6 +11,7 @@ using System.Linq;
 namespace InfoManager.Web.Controllers
 {
     [ApiController]
+    [Route("api/directors")]
     public class DirectorController : ControllerBase
     {
         private IDirectorRepository repository;
@@ -21,7 +22,7 @@ namespace InfoManager.Web.Controllers
             this.repository = repo;
         }
 
-        [HttpGet("api/directors")]
+        [HttpGet]
         public IActionResult GetDirectors(int page = 1, string searchTerm = "")
         {
             searchTerm = string.IsNullOrEmpty(searchTerm) ? "" : searchTerm.Trim();
@@ -38,14 +39,14 @@ namespace InfoManager.Web.Controllers
             return Ok(model); // Status 200
         }
 
-        [HttpGet("api/directors/search")]
+        [HttpGet("search")]
         public IActionResult Search(string searchTerm = "")
         {
             int page = 1;
             return GetDirectors(page, searchTerm);
         }
 
-        [HttpGet("api/directors/create")]
+        [HttpGet("create")]
         public IActionResult Create()
         {
             var model = new DataResult<DirectorResult>
@@ -61,12 +62,17 @@ namespace InfoManager.Web.Controllers
             return Ok(model);
         }
 
-        [HttpPost("api/directors")]
+        [HttpPost]
         public IActionResult Create([FromBody]DirectorArgument director)
         {
             if (director == null)
             {
-                return BadRequest(); // 400
+                return BadRequest(ResultBase.ErrorResult("Director is null")); // 400
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ResultBase.ErrorResult(ModelState));  // 400
             }
 
             var directorData = Mapper.Map<Director>(director);
@@ -81,7 +87,7 @@ namespace InfoManager.Web.Controllers
             return CreatedAtRoute("GetDirector", new { Id = result.Id }, result); // 201
         }
 
-        [HttpGet("api/directors/{id}", Name = "GetDirector")]
+        [HttpGet("{id}", Name = "GetDirector")]
         public IActionResult GetDirector(int id)
         {
             var director = this.repository.Get(id);
@@ -98,31 +104,32 @@ namespace InfoManager.Web.Controllers
             return Ok(result); // 200
         }
 
-        [HttpPut("api/directors")]
-        public IActionResult Edit([FromBody] DirectorArgument director)
+        [HttpPut("{id}")]
+        public IActionResult Edit(int id, [FromBody] DirectorArgument director)
         {
             if (director == null)
             {
-                return BadRequest(); // 400
+                return BadRequest(ResultBase.ErrorResult("Director is null")); // 400
             }
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);  // 400
+                return BadRequest(ResultBase.ErrorResult(ModelState));  // 400
             }
 
-            if (this.repository.Find(director.Id) == null)
+            if (this.repository.Find(id) == null)
             {
                 return NotFound(); // 404
             }
 
             var directorData = Mapper.Map<Director>(director);
+            directorData.Id = id;
             this.repository.Update(directorData);
 
             return Ok(directorData);
         }
 
-        [HttpGet("api/directors/delete")]
+        [HttpGet("delete")]
         public IActionResult Delete(int id)
         {
             var director = this.repository.Find(id);
@@ -134,7 +141,7 @@ namespace InfoManager.Web.Controllers
             return Ok(director);
         }
 
-        [HttpDelete("api/directors")]
+        [HttpDelete("{id}")]
         public IActionResult DeleteConfirm(int id)
         {
             if (this.repository.Find(id) == null)
@@ -143,11 +150,8 @@ namespace InfoManager.Web.Controllers
             }
 
             this.repository.Delete(id);
-            var result = new ResultBase
-            {
-                Success = true
-            };
-            return Ok(result);
+
+            return NoContent(); // 204
         }
     }
 }

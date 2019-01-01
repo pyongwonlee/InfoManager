@@ -10,6 +10,7 @@ using System.Linq;
 namespace InfoManager.Web.Controllers
 {
     [ApiController]
+    [Route("api/books")]
     public class BookController : ControllerBase
     {
         private IBookRepository repository;
@@ -20,7 +21,7 @@ namespace InfoManager.Web.Controllers
             this.repository = repo;
         }
 
-        [HttpGet("api/books")]
+        [HttpGet]
         public IActionResult GetBooks(int page = 1, string searchTerm = "")
         {
             searchTerm = string.IsNullOrEmpty(searchTerm) ? "" : searchTerm.Trim();
@@ -36,7 +37,7 @@ namespace InfoManager.Web.Controllers
             return Ok(model); // 200
         }
 
-        [HttpGet("api/books/refresh")]
+        [HttpGet("refresh")]
         public IActionResult Refresh()
         {
             int page = 1;
@@ -44,14 +45,14 @@ namespace InfoManager.Web.Controllers
             return GetBooks(page, searchTerm);
         }
 
-        [HttpGet("api/books/search")]
+        [HttpGet("search")]
         public IActionResult Search(string searchTerm = "")
         {
             int page = 1;
             return GetBooks(page, searchTerm);
         }
 
-        [HttpGet("api/books/create")]
+        [HttpGet("create")]
         public IActionResult Create()
         {
             var model = new DataResult<BookResult>
@@ -62,12 +63,17 @@ namespace InfoManager.Web.Controllers
             return Ok(model);
         }
 
-        [HttpPost("api/books")]
+        [HttpPost]
         public IActionResult Create([FromBody]BookArgument book)
         {
             if (book == null)
             {
-                return BadRequest(); // 400
+                return BadRequest(ResultBase.ErrorResult("Book is null")); // 400
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ResultBase.ErrorResult(ModelState));  // 400
             }
 
             var bookData = Mapper.Map<Book>(book);
@@ -77,12 +83,12 @@ namespace InfoManager.Web.Controllers
             }
 
             repository.Add(bookData);
-            var result = Mapper.Map<BookResult>(book);
+            var result = Mapper.Map<BookResult>(bookData);
 
             return CreatedAtRoute("GetBook", new { Id = result.BookId }, result); // 201
         }
 
-        [HttpGet("api/books/{id}", Name = "GetBook")]
+        [HttpGet("{id}", Name = "GetBook")]
         public IActionResult GetBook(int id)
         {
             var book = this.repository.Find(id);
@@ -99,33 +105,32 @@ namespace InfoManager.Web.Controllers
             return Ok(result); // 200
         }
 
-        [HttpPut]
-        [Route("api/books")]
-        public IActionResult Edit([FromBody] BookArgument book)
+        [HttpPut("{id}")]
+        public IActionResult Edit(int id, [FromBody] BookArgument book)
         {
             if (book == null)
             {
-                return BadRequest(); // 400
+                return BadRequest(ResultBase.ErrorResult("Book is null")); // 400
             }
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState); // 400
+                return BadRequest(ResultBase.ErrorResult(ModelState));  // 400
             }
 
-            if (this.repository.Find(book.BookId) == null)
+            if (this.repository.Find(id) == null)
             {
                 return NotFound(); // 404
             }
 
             var bookData = Mapper.Map<Book>(book);
+            bookData.BookId = id;
             this.repository.Update(bookData);
 
             return Ok(bookData);
         }
 
-        [HttpGet]
-        [Route("api/books/delete")]
+        [HttpGet("delete")]
         public IActionResult Delete(int id)
         {
             var book = this.repository.Find(id);
@@ -137,8 +142,7 @@ namespace InfoManager.Web.Controllers
             return Ok(book);
         }
 
-        [HttpDelete]
-        [Route("api/books")]
+        [HttpDelete("{id}")]
         public IActionResult DeleteConfirm(int id)
         {
             if (this.repository.Find(id) == null)
@@ -147,11 +151,8 @@ namespace InfoManager.Web.Controllers
             }
 
             this.repository.Delete(id);
-            var result = new ResultBase
-            {
-                Success = true
-            };
-            return Ok(result);
+
+            return NoContent(); // 204
         }
     }
 }

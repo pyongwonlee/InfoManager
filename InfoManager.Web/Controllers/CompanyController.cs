@@ -11,6 +11,7 @@ using System.Linq;
 namespace InfoManager.Web.Controllers
 {
     [ApiController]
+    [Route("api/companies")]
     public class CompanyController : ControllerBase
     {
         private ICategoryRepository categoryRepository;
@@ -24,7 +25,7 @@ namespace InfoManager.Web.Controllers
             this.repository = repo;
         }
 
-        [HttpGet("api/companies")]
+        [HttpGet]
         public ActionResult GetCompanies(int page = 1)
         {
             string searchTerm = string.Empty;
@@ -41,30 +42,7 @@ namespace InfoManager.Web.Controllers
             return Ok(model); // 200
         }
 
-        [HttpGet("api/categories/{categoryId}/companies")]
-        public ActionResult GetCompaniesForCategory(int categoryId)
-        {
-            var category = this.categoryRepository.Find(categoryId);
-            if (category == null)
-            {
-                return NotFound(); // 404
-            }
-
-            var companies = Mapper.Map<IEnumerable<CompanyResult>>(this.repository.GetCompaniesByCategory(categoryId))
-                    .ToArray();
-
-            var model = new ListResult<CompanyResult>
-            {
-                Success = true,
-                Items = companies,
-                TotalCount = companies.Length,
-                SearchString = string.Empty
-            };
-
-            return Ok(model); // 200
-        }
-
-        [HttpGet("api/companies/create")]
+        [HttpGet("create")]
         public IActionResult Create()
         {
             var model = new DataResult<CompanyResult>
@@ -79,23 +57,23 @@ namespace InfoManager.Web.Controllers
             return Ok(model);
         }
 
-        [HttpPost("api/companies")]
+        [HttpPost]
         public IActionResult Create([FromBody]CompanyArgument company)
         {
             if (company == null)
             {
-                return BadRequest(); // 400
+                return BadRequest(ResultBase.ErrorResult("Company is null")); // 400
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ResultBase.ErrorResult(ModelState));  // 400
             }
 
             var category = this.categoryRepository.Find(company.CategoryId);
             if (category == null)
             {
                 return NotFound(); // 404
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);  // 400
             }
 
             var companyData = Mapper.Map<Company>(company);
@@ -115,7 +93,7 @@ namespace InfoManager.Web.Controllers
             return CreatedAtRoute("GetCompany", new { Id = result.CompanyId }, result); // 201
         }
 
-        [HttpGet("api/companies/{id}", Name = "GetCompany")]
+        [HttpGet("{id}", Name = "GetCompany")]
         public IActionResult GetCompany(int id)
         {
             var company = this.repository.Get(id);
@@ -132,31 +110,32 @@ namespace InfoManager.Web.Controllers
             return Ok(result); // 200
         }
 
-        [HttpPut("api/companies")]
-        public IActionResult Edit([FromBody] CompanyArgument company)
+        [HttpPut("{id}")]
+        public IActionResult Edit(int id, [FromBody] CompanyArgument company)
         {
             if (company == null)
             {
-                return BadRequest(); // 400
+                return BadRequest(ResultBase.ErrorResult("Company is null")); // 400
             }
 
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);  // 400
+                return BadRequest(ResultBase.ErrorResult(ModelState));  // 400
             }
 
-            if (this.repository.Find(company.CompanyId) == null)
+            if (this.repository.Find(id) == null)
             {
                 return NotFound(); // 404
             }
 
             var companyData = Mapper.Map<Company>(company);
+            companyData.CompanyId = id;
             this.repository.Update(companyData);
 
             return Ok(companyData);
         }
 
-        [HttpGet("api/companies/delete")]
+        [HttpGet("delete")]
         public IActionResult Delete(int id)
         {
             var category = this.repository.Find(id);
@@ -168,7 +147,7 @@ namespace InfoManager.Web.Controllers
             return Ok(category);
         }
 
-        [HttpDelete("api/companies")]
+        [HttpDelete("{id}")]
         public IActionResult DeleteConfirm(int id)
         {
             if (this.repository.Find(id) == null)
@@ -177,11 +156,8 @@ namespace InfoManager.Web.Controllers
             }
 
             this.repository.Delete(id);
-            var result = new ResultBase
-            {
-                Success = true
-            };
-            return Ok(result);
+
+            return NoContent(); // 204
         }
     }
 }
