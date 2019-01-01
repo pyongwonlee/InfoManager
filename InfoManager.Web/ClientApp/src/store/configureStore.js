@@ -1,10 +1,10 @@
 ﻿import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
-import * as WeatherForecasts from './WeatherForecasts';
+import * as Directors from '../actions/Directors';
 
 export default function configureStore(initialState) {
   const reducers = {
-    weatherForecasts: WeatherForecasts.reducer
+    directorList: Directors.reducer
   };
 
   const middleware = [

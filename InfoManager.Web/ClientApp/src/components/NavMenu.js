@@ -3,23 +3,6 @@ import { Link, NavLink } from 'react-router-dom';
 import './NavMenu.css';
 import authService from '../services/authService';
 
-
-  /*
-  <Navbar inverse fixedTop fluid collapseOnSelect>
-    
-    </Navbar.Header>
-    <Navbar.Collapse>
-      <Nav>
-        <LinkContainer to={'/fetchdata'}>
-          <NavItem>
-            <Glyphicon glyph='th-list' /> Fetch data
-          </NavItem>
-        </LinkContainer>
-      </Nav>
-    </Navbar.Collapse>
-  </Navbar>
-  */
-
 export default props => (
   <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
     <Link className="navbar-brand" to='/'>InfoManager</Link>
@@ -47,16 +30,13 @@ export default props => (
             <i className="fas fa-video"></i> Movies
           </a>
           <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a className="dropdown-item" href="/director"><i className="fas fa-user"></i> Diirector</a>
+            <a className="dropdown-item" href="/director"><i className="fas fa-user"></i> Director</a>
             <div className="dropdown-divider"></div>
             <a className="dropdown-item" href="/movie"><i className="fas fa-film"></i> Movies</a>
           </div>
         </li>
         <li className="nav-item">
           <NavLink className="nav-link glyphicon" activeClassName="active" to={'/about'} title="About"> <i className="fas fa-info-circle"></i></NavLink>
-        </li>
-        <li className="nav-item">
-          <NavLink className="nav-link glyphicon" activeClassName="active" to={'/fetchdata'}> <i className="fas fa-list"></i> Test</NavLink>
         </li>
         <li className="nav-item">
           <Link to="/logout"  title="Logout" className={ authService.isAuthenticated() ? "nav-link" : "nav-link disabled"}><i className="fas fa-sign-out-alt"></i></Link>

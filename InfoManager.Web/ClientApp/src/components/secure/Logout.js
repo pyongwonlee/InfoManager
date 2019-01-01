@@ -4,10 +4,6 @@ import authService from '../../services/authService';
 
 class Logout extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   componentWillMount = () => {
     authService.signOut(() => {});
   };
