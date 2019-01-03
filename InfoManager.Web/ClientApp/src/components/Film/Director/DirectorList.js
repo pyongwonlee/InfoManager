@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Director from './Director';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -6,13 +7,24 @@ import { actionCreators } from '../../../actions/Directors'
 
 class DirectorList extends React.Component {
 
+  static propTypes = {
+    getDirectors: PropTypes.func.isRequired,
+    isLoading: PropTypes.bool.isRequired,
+    totalCount: PropTypes.number.isRequired,
+    directors: PropTypes.array
+  }
+
   componentDidMount() {
     this.props.getDirectors();
   }
 
   render() {
     if (this.props.isLoading) {
-      return <div><i className="fas fa-spinner"></i> Loading ...</div>
+      return (
+        <div>
+          <i className="fas fa-spinner"></i> Loading ...
+        </div>
+      );
     } else {
       return (
         <div className="container-fluid">
