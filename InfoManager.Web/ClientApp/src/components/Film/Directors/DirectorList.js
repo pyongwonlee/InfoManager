@@ -3,15 +3,15 @@ import PropTypes from 'prop-types';
 import Director from './Director';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { actionCreators } from '../../../actions/Directors'
+import { actionCreators } from '../../../actions/directorActions'
 
 class DirectorList extends React.Component {
 
   static propTypes = {
-    getDirectors: PropTypes.func.isRequired,
     isLoading: PropTypes.bool.isRequired,
     totalCount: PropTypes.number.isRequired,
-    directors: PropTypes.array
+    directors: PropTypes.array,
+    getDirectors: PropTypes.func.isRequired,
   }
 
   componentDidMount() {
@@ -55,7 +55,19 @@ class DirectorList extends React.Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    directors: state.directorList.directors,
+    totalCount: state.directorList.totalCount,
+    isLoading: state.directorList.isLoading
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return bindActionCreators(actionCreators, dispatch);
+};
+
 export default connect(
-  state => state.directorList,
-  dispatch => bindActionCreators(actionCreators, dispatch)
+  mapStateToProps,
+  mapDispatchToProps
 )(DirectorList);

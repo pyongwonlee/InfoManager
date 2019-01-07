@@ -35,6 +35,6 @@ Director.propTypes = {
   director: PropTypes.shape({
     name: PropTypes.string.isRequired
   })
-}
+};
 
 export default Director;

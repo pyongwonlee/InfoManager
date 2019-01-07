@@ -9,6 +9,15 @@ input.searchTerm {
     margin-right: 10px;
 }
 
+div.create-row {
+    margin-bottom: 10px;
+}
+
+/* Categories */
+div.new-category-form {
+    margin-bottom: 100px;
+}
+
 /* Directors */
 div.director-row {
     margin-top: 10px;

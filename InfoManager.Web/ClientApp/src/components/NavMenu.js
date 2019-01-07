@@ -3,7 +3,7 @@ import { Link, NavLink } from 'react-router-dom';
 import './NavMenu.css';
 import authService from '../services/authService';
 
-export default props => (
+ const NavMenu = (props) => (
   <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
     <Link className="navbar-brand" to='/'>InfoManager</Link>
     <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -19,7 +19,7 @@ export default props => (
             <i className="fas fa-lock"></i> Credentials
           </a>
           <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a className="dropdown-item" href="/"><i className="fas fa-layer-group"></i> Category</a>
+            <a className="dropdown-item" href="/category"><i className="fas fa-layer-group"></i> Category</a>
             <a className="dropdown-item" href="/"><i className="fas fa-building"></i> Company</a>
             <div className="dropdown-divider"></div>
             <a className="dropdown-item" href="/"><i className="fas fa-key"></i> Passeword</a>
@@ -45,3 +45,5 @@ export default props => (
     </div>
   </nav>
 );
+
+export default NavMenu;
