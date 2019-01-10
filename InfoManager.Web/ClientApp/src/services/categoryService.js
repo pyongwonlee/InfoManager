@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const categroyServiceBaseUrl = '/api/directors';
+const categroyServiceBaseUrl = '/api/categories';
 
 const categroyService = {
   getCategories: function() { 

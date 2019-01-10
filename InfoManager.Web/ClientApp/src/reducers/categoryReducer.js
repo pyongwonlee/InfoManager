@@ -1,9 +1,9 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialListState = { 
-  isLoading: true,
-  totalCount: 0,
-  categories: [] 
+    isLoading: true,
+    totalCount: 0,
+    categories: [] 
 };
 
 const initialCreateState = {

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 const CategoryForm = (props, ref) => {
   return (
@@ -17,10 +16,6 @@ const CategoryForm = (props, ref) => {
       </div>
     </form>
   );
-};
-
-CategoryForm.propTypes = {
-  onSave: PropTypes.func.isRequired
 };
 
 export default React.forwardRef(CategoryForm);

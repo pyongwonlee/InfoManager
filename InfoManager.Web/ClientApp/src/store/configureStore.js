@@ -1,15 +1,8 @@
-﻿import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
+﻿import { applyMiddleware, compose, createStore } from 'redux';
 import thunk from 'redux-thunk';
-import {categoryListReducer, categoryCreateReducer} from '../reducers/categoryReducer';
-import {directorListReducer} from '../reducers/directorReducer';
-import * as Directors from '../actions/directorActions';
+import rootReducer from '../reducers';
 
 export default function configureStore(initialState) {
-  const reducers = {
-    categoryList: categoryListReducer,
-    categoryCreate: categoryCreateReducer,
-    directorList: directorListReducer
-  };
 
   const middleware = [
     thunk
@@ -21,10 +14,6 @@ export default function configureStore(initialState) {
   if (isDevelopment && typeof window !== 'undefined' && window.devToolsExtension) {
     enhancers.push(window.devToolsExtension());
   }
-
-  const rootReducer = combineReducers({
-    ...reducers
-  });
 
   return createStore(
     rootReducer,

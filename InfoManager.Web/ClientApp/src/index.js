@@ -13,8 +13,9 @@ import 'jquery/dist/jquery.js';
 import 'popper.js/dist/esm/popper.js';
 import 'bootstrap/dist/js/bootstrap.js';
 
-// Get the application-wide store instance, prepopulating with state from the server where available.
-const initialState = window.initialReduxState;
+// Get the application-wide store instance.
+const initialState = {
+};
 const store = configureStore(initialState);
 
 ReactDOM.render(

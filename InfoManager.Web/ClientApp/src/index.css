@@ -17,6 +17,9 @@ div.create-row {
 div.new-category-form {
     margin-bottom: 100px;
 }
+div.category-row {
+    margin-top: 10px;
+}
 
 /* Directors */
 div.director-row {

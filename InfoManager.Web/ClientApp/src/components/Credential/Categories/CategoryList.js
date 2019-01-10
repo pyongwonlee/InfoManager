@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Category from './Category';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { getCategories } from '../../../actions/categoryActions'
@@ -39,17 +40,7 @@ class CategoryList extends React.Component {
               <a className="btn btn-primary" href="/category/create">Create a New Category</a>
             </div>
           </div>
-          {this.props.categories.map( (category, index) => {
-            return (
-            <div className="row" key={index}>
-              <div className="col-10 offset-1">
-                <div className="alert alert-info">
-                  {category.name}
-                </div>
-              </div>
-            </div>
-            )})
-          }
+          {this.props.categories.map( (category, index) => <Category category={category} key={index} />)}          
         </div>  
       );
     }

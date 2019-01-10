@@ -3,8 +3,7 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = { 
   isLoading: true,
   totalCount: 0,
-  directors: [
-  ] 
+  directors: [] 
 };
 
 export const directorListReducer = (state, action) => {
