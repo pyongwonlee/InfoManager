@@ -1,25 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Category from './Category';
+import CategoryRow from './CategoryRow';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { getCategories } from '../../../actions/categoryActions'
+import categoryActions from '../../../actions/categoryActions'
 
 class CategoryList extends React.Component {
 
   static propTypes = {
-    getCategories: PropTypes.func.isRequired,
+    actions: PropTypes.object.isRequired,
     isLoading: PropTypes.bool.isRequired,
     totalCount: PropTypes.number.isRequired,
     categories: PropTypes.array
   }
 
   componentDidMount() {
-    this.props.getCategories();
+    this.props.actions.getCategories();
   }
 
   render() {
-    if (this.props.isLoading) {
+    const {isLoading, totalCount, categories} = this.props;
+
+    if (isLoading) {
       return (
         <div>
           <i className="fas fa-spinner"></i> Loading ...
@@ -31,7 +33,7 @@ class CategoryList extends React.Component {
           <div className="row">
             <div className="col-10 offset-1">
               <h2>Categories</h2>
-              <p className="text-info">(Total Count: {this.props.totalCount})</p>              
+              <p className="text-info">(Total Count: {totalCount})</p>              
               <hr />
             </div>
           </div>
@@ -40,7 +42,9 @@ class CategoryList extends React.Component {
               <a className="btn btn-primary" href="/category/create">Create a New Category</a>
             </div>
           </div>
-          {this.props.categories.map( (category, index) => <Category category={category} key={index} />)}          
+          { categories.map((category, index) =>
+              <CategoryRow category={category} key={index} />)
+          }
         </div>  
       );
     }
@@ -56,7 +60,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({getCategories}, dispatch);
+  return {
+    actions: bindActionCreators(categoryActions, dispatch)
+  };
 };
 
 export default connect(

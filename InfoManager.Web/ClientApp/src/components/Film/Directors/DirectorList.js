@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Director from './Director';
+import DirectorRow from './DirectorRow';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { actionCreators } from '../../../actions/directorActions'
+import directorActions from '../../../actions/directorActions'
 
 class DirectorList extends React.Component {
 
@@ -11,15 +11,17 @@ class DirectorList extends React.Component {
     isLoading: PropTypes.bool.isRequired,
     totalCount: PropTypes.number.isRequired,
     directors: PropTypes.array,
-    getDirectors: PropTypes.func.isRequired,
+    actions: PropTypes.object.isRequired,
   }
 
   componentDidMount() {
-    this.props.getDirectors();
+    this.props.actions.getDirectors();
   }
 
   render() {
-    if (this.props.isLoading) {
+    const {isLoading, totalCount, directors} = this.props;
+
+    if (isLoading) {
       return (
         <div>
           <i className="fas fa-spinner"></i> Loading ...
@@ -31,7 +33,7 @@ class DirectorList extends React.Component {
           <div className="row">
             <div className="col-10 offset-1">
               <h2>Directors</h2>
-              <p className="text-info">(Total Count: {this.props.totalCount})</p>
+              <p className="text-info">(Total Count: {totalCount})</p>
               <hr />
             </div>
           </div>
@@ -48,7 +50,9 @@ class DirectorList extends React.Component {
               </form>
             </div>
           </div>
-          {this.props.directors.map( (director, index) => <Director director={director} key={index} />)}
+            { directors.map((director, index) => 
+                <DirectorRow director={director} key={index} />)
+            }
         </div>  
       );
     }
@@ -64,7 +68,9 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators(actionCreators, dispatch);
+  return {
+    actions: bindActionCreators(directorActions, dispatch)
+  };
 };
 
 export default connect(

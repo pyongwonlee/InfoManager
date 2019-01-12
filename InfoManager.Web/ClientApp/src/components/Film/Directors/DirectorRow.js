@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Director = (props) => {
+const DirectorRow = (props) => {
   let movieList = props.director.movies ?
     props.director.movies.map((movie) => {
       return `${movie.title} (${movie.year})`;
@@ -31,11 +31,11 @@ const Director = (props) => {
   );
 }
 
-Director.propTypes = {
+DirectorRow.propTypes = {
   director: PropTypes.shape({
     name: PropTypes.string.isRequired,
     movies: PropTypes.array
   })
 };
 
-export default Director;
+export default DirectorRow;

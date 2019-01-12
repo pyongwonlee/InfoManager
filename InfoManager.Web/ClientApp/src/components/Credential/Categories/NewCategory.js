@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import CategoryForm from './CategoryForm';
-import { createCategory } from '../../../actions/categoryActions'
+import categoryActions from '../../../actions/categoryActions'
 
 class NewCategory extends React.Component {
   constructor(props, context) {
@@ -16,25 +16,17 @@ class NewCategory extends React.Component {
       }
     };
 
-    this.nameInputRef = React.createRef();
-    this.onClickSave = this.onClickSave.bind(this);
+    this.onSave = this.onSave.bind(this);
   }
 
   static propTypes = {
     category: PropTypes.object,
-    createCategory: PropTypes.func.isRequired
+    actions: PropTypes.object.isRequired
   }
 
-  onClickSave(evt) {
-    if (evt) {
-      evt.preventDefault();
-    }
-    let category = {
-      name: this.nameInputRef.current.value
-    };
+  onSave(category) {
     console.log('title', category.name);
-
-    this.props.createCategory(category);
+    this.props.actions.createCategory(category);
   }
 
   render () {
@@ -46,7 +38,7 @@ class NewCategory extends React.Component {
             <hr />
           </div>
         </div>
-        <CategoryForm onSave={this.onClickSave} ref={this.nameInputRef} />
+        <CategoryForm onSave={this.onSave} />
       </div>
     );
   }
@@ -59,7 +51,9 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = (dispatch) => {
-  return bindActionCreators({createCategory}, dispatch);
+  return {
+    actions: bindActionCreators(categoryActions, dispatch)
+  };
 };
 
 export default connect(

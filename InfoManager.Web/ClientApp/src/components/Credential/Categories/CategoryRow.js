@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const Category = (props) => {
+const CategoryRow = (props) => {
   return (
     <div className="row category-row">
       <div className="col-10 offset-1">
@@ -35,11 +35,11 @@ const Category = (props) => {
   );
 }
 
-Category.propTypes = {
+CategoryRow.propTypes = {
   category: PropTypes.shape({
     name: PropTypes.string.isRequired,
     companies: PropTypes.array
   })
 };
 
-export default Category;
+export default CategoryRow;

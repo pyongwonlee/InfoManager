@@ -19,10 +19,10 @@ import authService from '../services/authService';
             <i className="fas fa-lock"></i> Credentials
           </a>
           <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a className="dropdown-item" href="/category"><i className="fas fa-layer-group"></i> Category</a>
-            <a className="dropdown-item" href="/"><i className="fas fa-building"></i> Company</a>
+            <NavLink className="dropdown-item" activeClassName="active" to={"/category"}><i className="fas fa-layer-group"></i> Category</NavLink>
+            <NavLink className="dropdown-item" activeClassName="active" to={"/company"}><i className="fas fa-building"></i> Company</NavLink>
             <div className="dropdown-divider"></div>
-            <a className="dropdown-item" href="/"><i className="fas fa-key"></i> Passeword</a>
+            <NavLink className="dropdown-item" activeClassName="active" to={"/password"}><i className="fas fa-key"></i> Passeword</NavLink>
           </div>
         </li>
         <li className="nav-item dropdown">
@@ -30,9 +30,9 @@ import authService from '../services/authService';
             <i className="fas fa-video"></i> Movies
           </a>
           <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a className="dropdown-item" href="/director"><i className="fas fa-user"></i> Director</a>
+            <NavLink className="dropdown-item" activeClassName="active" to={"/director"}><i className="fas fa-user"></i> Director</NavLink>
             <div className="dropdown-divider"></div>
-            <a className="dropdown-item" href="/movie"><i className="fas fa-film"></i> Movies</a>
+            <NavLink className="dropdown-item" activeClassName="active" to={"/movie"}><i className="fas fa-film"></i> Movies</NavLink>
           </div>
         </li>
         <li className="nav-item">

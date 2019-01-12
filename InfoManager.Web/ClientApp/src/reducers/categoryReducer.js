@@ -7,7 +7,9 @@ const initialListState = {
 };
 
 const initialCreateState = {
-  category: null
+  category: {
+    name: ''
+  }
 };
 
 export const categoryListReducer = (state, action) => {
@@ -19,7 +21,7 @@ export const categoryListReducer = (state, action) => {
         ...state,
         isLoading: true
       };
-    } 
+    }
     case actionTypes.RECEIVE_LOAD_CATEGORIES: {
       return {
         ...state,

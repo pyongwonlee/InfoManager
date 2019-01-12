@@ -1,26 +1,32 @@
 import categroyService from '../services/categoryService';
 import * as actionTypes from './actionTypes';
 
-export const getCategories = () => async (dispatch, getState) => {
-  dispatch({ 
-    type: actionTypes.REQUEST_LOAD_CATEGORIES
-  });
+const categoryActions = {
+  getCategories: () => {
+    return (dispatch, getState) => {      
+      dispatch({
+        type: actionTypes.REQUEST_LOAD_CATEGORIES  
+      });
+      
+      categroyService.getCategories()
+        .then(response => {
+          dispatch({ 
+            type: actionTypes.RECEIVE_LOAD_CATEGORIES, 
+            data: response.data 
+          });
+        }).catch (error => {
+          console.error(error);
+        });
+    }
+  },
 
-  try {
-    const response = await categroyService.getCategories();
-    dispatch({ 
-      type: actionTypes.RECEIVE_LOAD_CATEGORIES, 
-      data: response.data 
-    });
-  } catch (error) {
-    console.error(error);
+  createCategory: (category) => {
+    return {
+      type: actionTypes.CREATE_CATEGORY, 
+      category
+    };
   }
 };
 
-export const createCategory = (category) => {
-  return {
-    type: actionTypes.CREATE_CATEGORY, 
-    category
-  };
-};
+export default categoryActions;
 
