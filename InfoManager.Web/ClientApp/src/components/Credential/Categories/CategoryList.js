@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import CategoryRow from './CategoryRow';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import categoryActions from '../../../actions/categoryActions'
 
 class CategoryList extends React.Component {
@@ -39,7 +40,7 @@ class CategoryList extends React.Component {
           </div>
           <div className="row create-row">
             <div className="col-5 offset-1">
-              <a className="btn btn-primary" href="/category/create">Create a New Category</a>
+              <Link className="btn btn-primary" to="/category/0">Create a New Category</Link>
             </div>
           </div>
           { categories.map((category, index) =>

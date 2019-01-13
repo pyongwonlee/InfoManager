@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 const CategoryRow = (props) => {
   return (
@@ -8,7 +9,13 @@ const CategoryRow = (props) => {
       <div className="card">
         <div className="card-body">
           <div className="row">
-            <h4>{props.category.name}</h4>
+            <div className="col-3 text-left">
+              <h4 style={{marginLeft:'20px'}}>{props.category.name}</h4>
+            </div>
+            <div className="col-2 offset-7 text-right">
+              <Link to={`/category/${props.category.categoryId}`}><i className="fas fa-edit"></i></Link>
+              <Link to={`/category/delete/${props.category.categoryId}`}><i className="fas fa-trash-alt"></i></Link>              
+            </div>
           </div>
           <div className="row">
             <div className="col-1 text-right">

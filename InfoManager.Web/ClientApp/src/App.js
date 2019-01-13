@@ -4,7 +4,7 @@ import Layout from './components/Layout';
 import HomePage from './components/Home/HomePage';
 import AboutPage from './components/About/AboutPage';
 import CategoryList from './components/Credential/Categories/CategoryList';
-import NewCategory from './components/Credential/Categories/NewCategory';
+import ManageCategory from './components/Credential/Categories/ManageCategory';
 import DirectorList from './components/Film/Directors/DirectorList';
 import Login from './components/secure/Login';
 import Logout from './components/secure/Logout';
@@ -18,7 +18,7 @@ const App = (props)=> (
           <Route exact path='/' component={HomePage} />
           <Route path='/about' component={AboutPage} />
           <Route exact path='/category' component={CategoryList} />
-          <Route path='/category/create' component={NewCategory} />
+          <Route path='/category/:id' component={ManageCategory} />
           <Route exact path='/director' component={DirectorList} />
           <Route path="/login" component={Login} />
           <Route path="/logout" component={Logout} />

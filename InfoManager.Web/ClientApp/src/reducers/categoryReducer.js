@@ -6,15 +6,36 @@ const initialListState = {
     categories: [] 
 };
 
+const initialItemState = {
+    category: {
+      categoryId: 0,
+      name: '',
+      companies: []
+    }
+};
+
 const initialCreateState = {
   category: {
     name: ''
-  }
+  },
+  success: true,
+  errors: []
 };
 
-export const categoryListReducer = (state, action) => {
-  state = state || initialListState;
+const initialUpdateState = {
+  category: {
+    name: ''
+  },
+  success: true,
+  errors: []
+};
 
+const initialDeleteState = {
+  success: true,
+  errors: []
+};
+
+export const categoryListReducer = (state = initialListState, action) => {
   switch (action.type) {
     case actionTypes.REQUEST_LOAD_CATEGORIES: {
       return {
@@ -35,13 +56,54 @@ export const categoryListReducer = (state, action) => {
   }
 };
 
-export const categoryCreateReducer = (state, action) => {
-  state = state || initialCreateState;
+export const categoryGetReducer = (state = initialItemState, action) => {
+  switch (action.type) {
+    case actionTypes.GET_CATEGORY: {
+      return {
+        ...state,
+        category: action.data.item
+      };
+    }
+    default:
+      return state;
+  }
+};
 
+export const categoryCreateReducer = (state = initialCreateState, action) => {
   switch (action.type) {
     case actionTypes.CREATE_CATEGORY: {
       return {
-        ...state
+        ...state,
+        success: action.data.success,
+        errors: action.data.success
+      };
+    } 
+    default:
+      return state;
+  }
+}
+
+export const categoryUpdateReducer = (state = initialUpdateState, action) => {
+  switch (action.type) {
+    case actionTypes.UPDATE_CATEGORY: {
+      return {
+        ...state,
+        success: action.data.success,
+        errors: action.data.success
+      };
+    } 
+    default:
+      return state;
+  }
+}
+
+export const categoryDeleteReducer = (state = initialDeleteState, action) => {
+  switch (action.type) {
+    case actionTypes.DELETE_CATEGORY: {
+      return {
+        ...state,        
+        success: action.data.success,
+        errors: action.data.success
       };
     } 
     default:

@@ -1,14 +1,12 @@
 import * as actionTypes from '../actions/actionTypes';
 
-const initialState = { 
+const initialListState = { 
   isLoading: true,
   totalCount: 0,
   directors: [] 
 };
 
-export const directorListReducer = (state, action) => {
-  state = state || initialState;
-
+export const directorListReducer = (state= initialListState, action) => {
   switch(action.type) {
     case actionTypes.REQUEST_LOAD_DIRECTORS: {
       return {
