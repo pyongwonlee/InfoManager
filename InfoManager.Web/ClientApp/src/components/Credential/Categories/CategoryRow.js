@@ -44,6 +44,7 @@ const CategoryRow = (props) => {
 
 CategoryRow.propTypes = {
   category: PropTypes.shape({
+    categoryId: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     companies: PropTypes.array
   })
