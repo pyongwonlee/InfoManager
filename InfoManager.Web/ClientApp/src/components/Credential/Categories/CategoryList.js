@@ -54,9 +54,9 @@ class CategoryList extends React.Component {
 
 const mapStateToProps = (state) => {
   return {
-    categories: state.categoryList.categories,
-    totalCount: state.categoryList.totalCount,
-    isLoading: state.categoryList.isLoading
+    categories: state.categoryData.categories,
+    totalCount: state.categoryData.totalCount,
+    isLoading: state.categoryData.isLoading
   };
 };
 

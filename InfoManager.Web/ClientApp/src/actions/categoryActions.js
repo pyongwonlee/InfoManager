@@ -21,12 +21,16 @@ const categoryActions = {
   },
 
   getCategory: (id) => {
-    return (dispatch, getState) => {  
+    return (dispatch, getState) => {
+      dispatch({
+        type: actionTypes.REQUEST_GET_CATEGORY  
+      });
+
       if (id > 0) {    
         categroyService.getCategory(id)
           .then(response => {
             dispatch({ 
-              type: actionTypes.GET_CATEGORY, 
+              type: actionTypes.RECEIVE_GET_CATEGORY, 
               data: response.data
             });
           }).catch (error => {
@@ -34,7 +38,7 @@ const categoryActions = {
           });
       } else {
         dispatch({ 
-          type: actionTypes.GET_CATEGORY, 
+          type: actionTypes.RECEIVE_GET_CATEGORY, 
           data: {
             item: {
               categoryId: 0,

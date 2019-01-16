@@ -8,12 +8,8 @@ class CategoryForm extends React.Component {
     super (props, context);
 
     this.state = {
-      name: this.props.data.name || ''
+      name: props.data.name
     }
-
-    this.onNameChange = this.onNameChange.bind(this);
-    this.onClickSave = this.onClickSave.bind(this);
-    this.displayErrors = this.displayErrors.bind(this);
   } 
 
   static propTypes = {
@@ -54,7 +50,7 @@ class CategoryForm extends React.Component {
             })}
           </ul>
         </div>
-      );
+      );    
     } 
   }
 
@@ -66,7 +62,8 @@ class CategoryForm extends React.Component {
           <TextInput name="inputCategory" label="Name:" 
             placeholder="type Category Name"
             onChange={this.onNameChange}
-            value = {this.state.name} />
+            value = {this.state.name}
+            key= {this.props.data.name} />
           <div className="form-group row">
             <div className="col-8 offset-1">
               <button type="submit" className="btn btn-primary" onClick={this.onClickSave}>Save</button>

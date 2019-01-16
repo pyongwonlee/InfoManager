@@ -1,46 +1,26 @@
 import * as actionTypes from '../actions/actionTypes';
 
-const initialListState = { 
+const initialState = { 
     isLoading: true,
     totalCount: 0,
-    categories: [] 
-};
-
-const initialItemState = {
+    categories: [],
     category: {
       categoryId: 0,
       name: '',
       companies: []
-    }
+    },
+    success: true,
+    errors: []
 };
 
-const initialCreateState = {
-  category: {
-    name: ''
-  },
-  success: true,
-  errors: []
-};
-
-const initialUpdateState = {
-  category: {
-    name: ''
-  },
-  success: true,
-  errors: []
-};
-
-const initialDeleteState = {
-  success: true,
-  errors: []
-};
-
-export const categoryListReducer = (state = initialListState, action) => {
+const categoryReducer = (state = initialState, action) => {
   switch (action.type) {
     case actionTypes.REQUEST_LOAD_CATEGORIES: {
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        success: true,
+        errors: []
       };
     }
     case actionTypes.RECEIVE_LOAD_CATEGORIES: {
@@ -48,65 +28,55 @@ export const categoryListReducer = (state = initialListState, action) => {
         ...state,
         totalCount: action.data.totalCount,
         categories: action.data.items,
-        isLoading: false
+        isLoading: false,
+        success: true,
+        errors: []
       };
-    }
-    default:
-      return state;
-  }
-};
-
-export const categoryGetReducer = (state = initialItemState, action) => {
-  switch (action.type) {
-    case actionTypes.GET_CATEGORY: {
+    }       
+    case actionTypes.REQUEST_GET_CATEGORY: {
       return {
         ...state,
-        category: action.data.item
+        isLoading: true,
+        success: true,
+        errors: []
       };
     }
-    default:
-      return state;
-  }
-};
-
-export const categoryCreateReducer = (state = initialCreateState, action) => {
-  switch (action.type) {
+    case actionTypes.RECEIVE_GET_CATEGORY: {
+      return {
+        ...state,
+        category: action.data.item,
+        isLoading: false,
+        success: true,
+        errors: []
+      };
+    }
     case actionTypes.CREATE_CATEGORY: {
       return {
         ...state,
         success: action.data.success,
-        errors: action.data.success
+        errors: action.data.errors,
+        isLoading: false
       };
     } 
-    default:
-      return state;
-  }
-}
-
-export const categoryUpdateReducer = (state = initialUpdateState, action) => {
-  switch (action.type) {
     case actionTypes.UPDATE_CATEGORY: {
       return {
         ...state,
         success: action.data.success,
-        errors: action.data.success
+        errors: action.data.errors,
+        isLoading: false
       };
     } 
-    default:
-      return state;
-  }
-}
-
-export const categoryDeleteReducer = (state = initialDeleteState, action) => {
-  switch (action.type) {
     case actionTypes.DELETE_CATEGORY: {
       return {
         ...state,        
         success: action.data.success,
-        errors: action.data.success
+        errors: action.data.errors,
+        isLoading: false
       };
     } 
     default:
       return state;
   }
-}
+};
+
+export default categoryReducer;

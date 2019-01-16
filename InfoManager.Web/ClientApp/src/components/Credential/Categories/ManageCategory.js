@@ -31,7 +31,6 @@ class ManageCategory extends React.Component {
   }
 
   onSave(category) {
-    console.log('title', category.name);
     if (this.state.isBeingUpdated) {
       this.props.actions.updateCategory(this.state.categoryId, category);
     } else {
@@ -44,29 +43,38 @@ class ManageCategory extends React.Component {
   }
 
   render () {
-    let saveResult = (this.state.isBeingUpdated) ?
-      this.props.updateCategoryData :
-      this.props.createCategoryData;
-
-    return (
-      <div className="container-fluid new-category-form">
-        <div className="row">
-          <div className="col-10 offset-1">
-            <h2>{this.getTitle()}</h2>         
-            <hr />
-          </div>
+    let saveResult = {
+      success: this.props.success,
+      errors: this.props.errors
+    };
+    if (this.props.isLoading) {
+      return (
+        <div>
+          <i className="fas fa-spinner"></i> Loading ...
         </div>
-        <CategoryForm data={this.props.category} saveResult={saveResult} onSave={this.onSave} />
-      </div>
-    );
+      );
+    } else {
+      return (
+        <div className="container-fluid new-category-form">
+          <div className="row">
+            <div className="col-10 offset-1">
+              <h2>{this.getTitle()}</h2> 
+              <hr />
+            </div>
+          </div>
+          <CategoryForm data={this.props.category} saveResult={saveResult} onSave={this.onSave} />
+        </div>
+      );
+    }   
   }
 }
 
 const mapStateToProps = (state, ownProps) => {
   return {
     category: state.categoryData.category,
-    createCategoryData: state.categoryCreate,
-    updateCategoryData: state.cateoryUpdate
+    success: state.categoryData.success,
+    errors: state.categoryData.errors,
+    isLoading: state.categoryData.isLoading
   };
 };
 

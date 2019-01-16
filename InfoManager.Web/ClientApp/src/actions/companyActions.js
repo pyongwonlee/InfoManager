@@ -26,7 +26,7 @@ const companyActions = {
         companyService.getCompany(id)
           .then(response => {
             dispatch({ 
-              type: actionTypes.GET_COMPANY, 
+              type: actionTypes.RECEIVE_GET_COMPANY, 
               data: response.data
             });
           }).catch (error => {
@@ -34,7 +34,7 @@ const companyActions = {
           });
       } else {
         dispatch({ 
-          type: actionTypes.GET_COMPANY, 
+          type: actionTypes.RECEIVE_GET_COMPANY, 
           data: {
             item: {
               companyId: 0,
