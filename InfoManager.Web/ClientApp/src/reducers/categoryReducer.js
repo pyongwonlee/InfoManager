@@ -1,26 +1,34 @@
 import * as actionTypes from '../actions/actionTypes';
 
-const initialState = { 
+const initialListState = { 
     isLoading: true,
     totalCount: 0,
     categories: [],
-    category: {
-      categoryId: 0,
-      name: '',
-      companies: []
-    },
     success: true,
     errors: []
 };
 
-const categoryReducer = (state = initialState, action) => {
+const initialGetState = {  
+  isLoading: true,
+  category: {
+    categoryId: 0,
+    name: '',
+    companies: []
+  },
+  success: true,
+  errors: []
+};
+
+const initialActionState = {
+  success: true,
+  errors: []
+};
+
+export const categoryListReducer = (state = initialListState, action) => {
   switch (action.type) {
     case actionTypes.REQUEST_LOAD_CATEGORIES: {
       return {
         ...state,
-        isLoading: true,
-        success: true,
-        errors: []
       };
     }
     case actionTypes.RECEIVE_LOAD_CATEGORIES: {
@@ -32,7 +40,14 @@ const categoryReducer = (state = initialState, action) => {
         success: true,
         errors: []
       };
-    }       
+    }
+    default:
+      return state;
+  }
+}
+
+export const categoryGetReducer = (state = initialGetState, action) => {
+  switch (action.type) {
     case actionTypes.REQUEST_GET_CATEGORY: {
       return {
         ...state,
@@ -50,33 +65,35 @@ const categoryReducer = (state = initialState, action) => {
         errors: []
       };
     }
+    default:
+      return state;
+  }
+}
+
+export const categoryActionsReducer = (state = initialActionState, action) => {
+  switch (action.type) {
     case actionTypes.CREATE_CATEGORY: {
       return {
         ...state,
         success: action.data.success,
-        errors: action.data.errors,
-        isLoading: false
+        errors: action.data.errors
       };
-    } 
+    }
     case actionTypes.UPDATE_CATEGORY: {
       return {
         ...state,
         success: action.data.success,
-        errors: action.data.errors,
-        isLoading: false
+        errors: action.data.errors
       };
     } 
     case actionTypes.DELETE_CATEGORY: {
       return {
-        ...state,        
+        ...state,
         success: action.data.success,
-        errors: action.data.errors,
-        isLoading: false
+        errors: action.data.errors
       };
     } 
     default:
       return state;
   }
 };
-
-export default categoryReducer;

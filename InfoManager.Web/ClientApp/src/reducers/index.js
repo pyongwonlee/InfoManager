@@ -1,11 +1,13 @@
 import { combineReducers } from 'redux';
 import * as companyReducers from '../reducers/companyReducer';
-import categoryReducer from '../reducers/categoryReducer';
+import * as categoryReducer from '../reducers/categoryReducer';
 import * as directorReducers from '../reducers/directorReducer';
 
 const rootReducers = combineReducers({
   companyList: companyReducers.companyListReducer,
-  categoryData: categoryReducer,
+  categoryList: categoryReducer.categoryListReducer,
+  categoryData: categoryReducer.categoryGetReducer,
+  categoryActions: categoryReducer.categoryActionsReducer,
   directorList: directorReducers.directorListReducer
 });
 

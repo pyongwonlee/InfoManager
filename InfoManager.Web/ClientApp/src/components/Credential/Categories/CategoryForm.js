@@ -60,7 +60,7 @@ class CategoryForm extends React.Component {
         {this.displayErrors()}
         <form>
           <TextInput name="inputCategory" label="Name:" 
-            placeholder="type Category Name"
+            placeholder="type category name"
             onChange={this.onNameChange}
             value = {this.state.name}
             key= {this.props.data.name} />

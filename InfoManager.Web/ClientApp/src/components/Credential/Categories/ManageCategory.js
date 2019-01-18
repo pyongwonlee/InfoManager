@@ -8,14 +8,10 @@ import categoryActions from '../../../actions/categoryActions'
 class ManageCategory extends React.Component {
   constructor(props, context) {
     super (props, context);
-
     this.state = {
       categoryId: this.props.match.params.id,
       isBeingUpdated: this.props.match.params.id > 0
     }
-
-    this.onSave = this.onSave.bind(this);
-    this.getTitle = this.getTitle.bind(this);
   }
 
   static propTypes = {
@@ -26,11 +22,11 @@ class ManageCategory extends React.Component {
     match: PropTypes.any
   }
 
-  componentDidMount() {    
+  componentDidMount() {
     this.props.actions.getCategory(this.state.categoryId);
   }
 
-  onSave(category) {
+  onSave = (category) => {
     if (this.state.isBeingUpdated) {
       this.props.actions.updateCategory(this.state.categoryId, category);
     } else {
@@ -38,15 +34,24 @@ class ManageCategory extends React.Component {
     }
   }
 
-  getTitle() {
-    return (this.props.match.params.id > 0) ? "Edit Category" : "Create Category";
+  getTitle = () => {
+    return (this.state.isBeingUpdated) ? `Edit Category: ${this.props.category.name}` : "Create Category";
   }
 
   render () {
+    let categoryData = (this.state.isBeingUpdated) ?
+      this.props.category :
+      {  
+        categoryId: 0,
+        name: '',
+        companies: []
+      };
+
     let saveResult = {
       success: this.props.success,
       errors: this.props.errors
     };
+    
     if (this.props.isLoading) {
       return (
         <div>
@@ -62,7 +67,7 @@ class ManageCategory extends React.Component {
               <hr />
             </div>
           </div>
-          <CategoryForm data={this.props.category} saveResult={saveResult} onSave={this.onSave} />
+          <CategoryForm data={categoryData} saveResult={saveResult} onSave={this.onSave} />
         </div>
       );
     }   
@@ -74,7 +79,9 @@ const mapStateToProps = (state, ownProps) => {
     category: state.categoryData.category,
     success: state.categoryData.success,
     errors: state.categoryData.errors,
-    isLoading: state.categoryData.isLoading
+    isLoading: state.categoryData.isLoading,
+    actionSuccess: state.categoryActions.success,
+    actionErrors: state.categoryActions.errors
   };
 };
 

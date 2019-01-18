@@ -3,7 +3,9 @@ import * as actionTypes from '../actions/actionTypes';
 const initialListState = { 
   isLoading: true,
   totalCount: 0,
-  directors: [] 
+  directors: [],
+  success: true,
+  errors: []
 };
 
 export const directorListReducer = (state= initialListState, action) => {

@@ -90,13 +90,15 @@ namespace InfoManager.DataAccess.Concrete.Credentials
             return category.CategoryId;
         }
 
-        public void Update(Category category)
+        public void Update(Category categoryData)
         {
-            if (!this.Exists(category.CategoryId))
-            {
-                throw new ArgumentException($"Category with Id({category.CategoryId}) does not exist");
+            var category = Find(categoryData.CategoryId);
+            if (category == null)
+            {                
+                throw new ArgumentException($"Category with Id({categoryData.CategoryId}) does not exist");
             }
 
+            category.Name = categoryData.Name;
             this.context.Entry(category).State = EntityState.Modified;
             this.context.SaveChanges();
         }

@@ -23,7 +23,7 @@ const categoryActions = {
   getCategory: (id) => {
     return (dispatch, getState) => {
       dispatch({
-        type: actionTypes.REQUEST_GET_CATEGORY  
+        type: actionTypes.REQUEST_GET_CATEGORY
       });
 
       if (id > 0) {    
