@@ -1,17 +1,16 @@
 import directorService from '../services/directorService';
 import * as actionTypes from './actionTypes';
+import {beginAsynAction} from './asyncStatusActions';
 
 const directorActions = {
   getDirectors: () => {
-    return (dispatch, getState) => {      
-      dispatch({
-        type: actionTypes.REQUEST_LOAD_DIRECTORS  
-      });
+    return (dispatch, getState) => { 
+      dispatch(beginAsynAction());
       
-      directorService.getDirectors()
+      return directorService.getDirectors()
         .then(response => {
           dispatch({ 
-            type: actionTypes.RECEIVE_LOAD_DIRECTORS, 
+            type: actionTypes.LOAD_DIRECTORS_SUCCESS, 
             data: response.data 
           });
         }).catch (error => {

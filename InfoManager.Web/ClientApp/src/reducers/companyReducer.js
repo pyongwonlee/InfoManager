@@ -1,27 +1,13 @@
 import * as actionTypes from '../actions/actionTypes';
+import initialState from '../store/initialState';
 
-const initialListState = { 
-  isLoading: true,
-  totalCount: 0,
-  companies: [],
-  success: true,
-  errors: []
-};
-
-export const companyListReducer = (state= initialListState, action) => {
+export const companyListReducer = (state= initialState, action) => {
   switch(action.type) {
-    case actionTypes.REQUEST_LOAD_COMPANIES: {
-      return {
-        ...state,
-        isLoading: true
-      };
-    } 
-    case actionTypes.RECEIVE_LOAD_COMPANIES: {
+    case actionTypes.LOAD_COMPANIES_SUCCESS: {
       return {
         ...state,
         totalCount: action.data.totalCount,
-        companies: action.data.items,
-        isLoading: false
+        companies: action.data.items
       };
     }
     default:

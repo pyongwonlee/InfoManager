@@ -47,12 +47,6 @@ class CategoryForm extends React.Component {
     let category = {
       name: this.state.name
     };
-
-    // clean state
-    this.setState({
-      categoryId: 0,
-      name: ''
-    });
     this.props.onSave(category);
   }
 

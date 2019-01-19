@@ -8,7 +8,6 @@ import directorActions from '../../../actions/directorActions'
 class DirectorList extends React.Component {
 
   static propTypes = {
-    isLoading: PropTypes.bool.isRequired,
     totalCount: PropTypes.number.isRequired,
     directors: PropTypes.array,
     actions: PropTypes.object.isRequired,
@@ -19,51 +18,42 @@ class DirectorList extends React.Component {
   }
 
   render() {
-    const {isLoading, totalCount, directors} = this.props;
-
-    if (isLoading) {
-      return (
-        <div>
-          <i className="fas fa-spinner"></i> Loading ...
+    const {totalCount, directors} = this.props;
+    
+    return (
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-10 offset-1">
+            <h2>Directors</h2>
+            <p className="text-info">(Total Count: {totalCount})</p>
+            <hr />
+          </div>
         </div>
-      );
-    } else {
-      return (
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-10 offset-1">
-              <h2>Directors</h2>
-              <p className="text-info">(Total Count: {totalCount})</p>
-              <hr />
-            </div>
+        <div className="row">
+          <div className="col-5  offset-1">
+            <a className="btn btn-primary" href="/director/create">Create a New Director</a>
           </div>
-          <div className="row">
-            <div className="col-5  offset-1">
-              <a className="btn btn-primary" href="/director/create">Create a New Director</a>
-            </div>
-            <div className="col-5">
-              <form className="form-inline">
-                <div className="text-right" style={{width:"100%"}}>
-                  <input name="searchTerm" className="form-control searchTerm" type="search" />
-                  <button className="btn btn-info searchBtn" type="submit"><i className="fa fa-search"></i></button>
-                </div>
-              </form>
-            </div>
+          <div className="col-5">
+            <form className="form-inline">
+              <div className="text-right" style={{width:"100%"}}>
+                <input name="searchTerm" className="form-control searchTerm" type="search" />
+                <button className="btn btn-info searchBtn" type="submit"><i className="fa fa-search"></i></button>
+              </div>
+            </form>
           </div>
-            { directors.map((director, index) => 
-                <DirectorRow director={director} key={index} />)
-            }
-        </div>  
-      );
-    }
+        </div>
+          { directors.map((director, index) => 
+              <DirectorRow director={director} key={index} />)
+          }
+      </div>  
+    );
   }
 }
 
 const mapStateToProps = (state) => {
   return {
     directors: state.directorList.directors,
-    totalCount: state.directorList.totalCount,
-    isLoading: state.directorList.isLoading
+    totalCount: state.directorList.totalCount
   };
 };
 

@@ -28,15 +28,20 @@ class ManageCategory extends React.Component {
     }
   }
 
+  handleResult = () => {
+    if (this.props.actionSuccess) {
+      this.context.router.history.push('/category');
+    } 
+  };
+
   onSave = (category) => {
     if (this.state.isBeingUpdated) {
-      this.props.actions.updateCategory(this.state.categoryId, category);
+      this.props.actions.updateCategory(this.state.categoryId, category)
+        .then(() => this.handleResult())
     } else {
-      this.props.actions.createCategory(category);
+      this.props.actions.createCategory(category)
+        .then(() => this.handleResult());
     }
-    setTimeout( () => {
-      this.context.router.history.push('/category');
-    }, 1000);
   }
 
   getTitle = () => {
@@ -81,7 +86,6 @@ const mapStateToProps = (state, ownProps) => {
     category: category,
     success: state.categoryData.success,
     errors: state.categoryData.errors,
-    isLoading: state.categoryData.isLoading,
     actionSuccess: state.categoryActions.success,
     actionErrors: state.categoryActions.errors
   };

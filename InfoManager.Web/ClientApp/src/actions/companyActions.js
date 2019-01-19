@@ -1,17 +1,16 @@
 import companyService from '../services/companyService';
 import * as actionTypes from './actionTypes';
+import {beginAsynAction} from './asyncStatusActions';
 
 const companyActions = {
   getCompanies: () => {
-    return (dispatch, getState) => {      
-      dispatch({
-        type: actionTypes.REQUEST_LOAD_COMPANIES 
-      });
+    return (dispatch, getState) => {
+      dispatch(beginAsynAction());
 
-      companyService.getCompanies()
+      return companyService.getCompanies()
         .then(response => {
           dispatch({ 
-            type: actionTypes.RECEIVE_LOAD_COMPANIES , 
+            type: actionTypes.LOAD_COMPANIES_SUCCESS , 
             data: response.data 
           });
         }).catch (error => {
@@ -22,37 +21,28 @@ const companyActions = {
 
   getCompany: (id) => {
     return (dispatch, getState) => {  
-      if (id > 0) {    
-        companyService.getCompany(id)
-          .then(response => {
-            dispatch({ 
-              type: actionTypes.RECEIVE_GET_COMPANY, 
-              data: response.data
-            });
-          }).catch (error => {
-            console.error(error);
+      dispatch(beginAsynAction());
+
+      return companyService.getCompany(id)
+        .then(response => {
+          dispatch({ 
+            type: actionTypes.GET_COMPANY_SUCCESS, 
+            data: response.data
           });
-      } else {
-        dispatch({ 
-          type: actionTypes.RECEIVE_GET_COMPANY, 
-          data: {
-            item: {
-              companyId: 0,
-              name: '',
-              passwords: []  
-            }
-          }
-        });
-      }
+        }).catch (error => {
+          console.error(error);
+        }); 
     };
   },
 
   createCompany: (company) => {
     return (dispatch, getState) => { 
-      companyService.createCompany(company)
+      dispatch(beginAsynAction());
+      
+      return companyService.createCompany(company)
         .then(response => {
           dispatch({
-            type: actionTypes.CREATE_COMPANY,
+            type: actionTypes.CREATE_COMPANY_SUCCESS,
             data: {
               success: true,
               errors: []
@@ -60,7 +50,7 @@ const companyActions = {
           });
         }).catch (error => {
           dispatch({
-            type: actionTypes.CREATE_COMPANY,
+            type: actionTypes.CREATE_COMPANY_SUCCESS,
             data: {
               success: false,
               errors: ['Cannot create the company']
@@ -72,10 +62,12 @@ const companyActions = {
 
   updateCompany: (id, company) => {
     return (dispatch, getState) => { 
-      companyService.updateCompany(id, company)
+      dispatch(beginAsynAction());
+      
+      return companyService.updateCompany(id, company)
         .then(response => {
           dispatch({
-            type: actionTypes.UPDATE_COMPANY,
+            type: actionTypes.UPDATE_COMPANY_SUCCESS,
             data: {
               success: true,
               errors: []
@@ -83,7 +75,7 @@ const companyActions = {
           });
         }).catch (error => {
           dispatch({
-            type: actionTypes.UPDATE_COMPANY,
+            type: actionTypes.UPDATE_COMPANY_SUCCESS,
             data: {
               success: false,
               errors: ['Cannot update the company']
@@ -95,10 +87,12 @@ const companyActions = {
 
   deleteCompany: (id) => {
     return (dispatch, getState) => { 
-      companyService.deleteCompany(id)
+      dispatch(beginAsynAction());
+      
+      return companyService.deleteCompany(id)
         .then(response => {
           dispatch({
-            type: actionTypes.DELETE_COMPANY,
+            type: actionTypes.DELETE_COMPANY_SUCCESS,
             data: {
               success: true,
               errors: []
@@ -106,7 +100,7 @@ const companyActions = {
           });
         }).catch (error => {
           dispatch({
-            type: actionTypes.DELETE_COMPANY,
+            type: actionTypes.DELETE_COMPANY_SUCCESS,
             data: {
               success: false,
               errors: ['Cannot delete the company']

@@ -1,17 +1,16 @@
 import categroyService from '../services/categoryService';
 import * as actionTypes from './actionTypes';
+import {beginAsynAction} from './asyncStatusActions';
 
 const categoryActions = {
   getCategories: () => {
     return (dispatch, getState) => {      
-      dispatch({
-        type: actionTypes.REQUEST_LOAD_CATEGORIES  
-      });
+      dispatch(beginAsynAction());
 
-      categroyService.getCategories()
+      return categroyService.getCategories()
         .then(response => {
           dispatch({
-            type: actionTypes.RECEIVE_LOAD_CATEGORIES, 
+            type: actionTypes.LOAD_CATEGORIES_SUCCESS, 
             data: response.data 
           });
         }).catch (error => {
@@ -22,14 +21,15 @@ const categoryActions = {
 
   getCategory: (id) => {
     return (dispatch, getState) => {
-      dispatch({
-        type: actionTypes.REQUEST_GET_CATEGORY
+      dispatch(beginAsynAction());
+      dispatch ({
+        type: actionTypes.GET_CATEGORY_BEGIN
       });
 
-      categroyService.getCategory(id)
+      return categroyService.getCategory(id)
         .then(response => {
           dispatch({
-            type: actionTypes.RECEIVE_GET_CATEGORY, 
+            type: actionTypes.GET_CATEGORY_SUCCESS, 
             data: response.data
           });
         }).catch (error => {
@@ -40,10 +40,12 @@ const categoryActions = {
 
   createCategory: (category) => {
     return (dispatch, getState) => { 
-      categroyService.createCategory(category)
+      dispatch(beginAsynAction());
+
+      return categroyService.createCategory(category)
         .then(response => {
           dispatch({
-            type: actionTypes.CREATE_CATEGORY,
+            type: actionTypes.CREATE_CATEGORY_SUCCESS,
             data: {
               success: true,
               errors: []
@@ -51,7 +53,7 @@ const categoryActions = {
           });
         }).catch (error => {
           dispatch({
-            type: actionTypes.CREATE_CATEGORY,
+            type: actionTypes.CREATE_CATEGORY_SUCCESS,
             data: {
               success: false,
               errors: ['Cannot create the category']
@@ -63,10 +65,12 @@ const categoryActions = {
 
   updateCategory: (id, category) => {
     return (dispatch, getState) => { 
-      categroyService.updateCategory(id, category)
+      dispatch(beginAsynAction());
+      
+      return categroyService.updateCategory(id, category)
         .then(response => {
           dispatch({
-            type: actionTypes.UPDATE_CATEGORY,
+            type: actionTypes.UPDATE_CATEGORY_SUCCESS,
             data: {
               success: true,
               errors: []
@@ -74,7 +78,7 @@ const categoryActions = {
           });
         }).catch (error => {
           dispatch({
-            type: actionTypes.UPDATE_CATEGORY,
+            type: actionTypes.UPDATE_CATEGORY_SUCCESS,
             data: {
               success: false,
               errors: ['Cannot update the category']
@@ -86,10 +90,12 @@ const categoryActions = {
 
   deleteCategory: (id) => {
     return (dispatch, getState) => { 
-      categroyService.deleteCategory(id)
+      dispatch(beginAsynAction());
+      
+      return categroyService.deleteCategory(id)
         .then(response => {
           dispatch({
-            type: actionTypes.DELETE_CATEGORY,
+            type: actionTypes.DELETE_CATEGORY_SUCCESS,
             data: {
               success: true,
               errors: []
@@ -97,7 +103,7 @@ const categoryActions = {
           });
         }).catch (error => {
           dispatch({
-            type: actionTypes.DELETE_CATEGORY,
+            type: actionTypes.DELETE_CATEGORY_SUCCESS,
             data: {
               success: false,
               errors: ['Cannot delete the category']

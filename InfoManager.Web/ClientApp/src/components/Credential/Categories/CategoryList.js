@@ -10,7 +10,6 @@ class CategoryList extends React.Component {
 
   static propTypes = {
     actions: PropTypes.object.isRequired,
-    isLoading: PropTypes.bool.isRequired,
     totalCount: PropTypes.number.isRequired,
     categories: PropTypes.array
   }
@@ -20,43 +19,34 @@ class CategoryList extends React.Component {
   }
 
   render() {
-    const {isLoading, totalCount, categories} = this.props;
+    const {totalCount, categories} = this.props;
 
-    if (isLoading) {
-      return (
-        <div>
-          <i className="fas fa-spinner"></i> Loading ...
+    return (
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-10 offset-1">
+            <h2>Categories</h2>
+            <p className="text-info">(Total Count: {totalCount})</p>              
+            <hr />
+          </div>
         </div>
-      );
-    } else {
-      return (
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-10 offset-1">
-              <h2>Categories</h2>
-              <p className="text-info">(Total Count: {totalCount})</p>              
-              <hr />
-            </div>
+        <div className="row create-row">
+          <div className="col-5 offset-1">
+            <Link className="btn btn-primary" to="/category/0">Create a New Category</Link>
           </div>
-          <div className="row create-row">
-            <div className="col-5 offset-1">
-              <Link className="btn btn-primary" to="/category/0">Create a New Category</Link>
-            </div>
-          </div>
-          { categories.map((category, index) =>
-              <CategoryRow category={category} key={index} />)
-          }
-        </div>  
-      );
-    }
+        </div>
+        { categories.map((category, index) =>
+            <CategoryRow category={category} key={index} />)
+        }
+      </div>  
+    );
   }
 }
 
 const mapStateToProps = (state) => {
   return {
     categories: state.categoryList.categories,
-    totalCount: state.categoryList.totalCount,
-    isLoading: state.categoryList.isLoading
+    totalCount: state.categoryList.totalCount
   };
 };
 
