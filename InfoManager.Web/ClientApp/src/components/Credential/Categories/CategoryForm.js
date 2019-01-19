@@ -6,8 +6,8 @@ import TextInput from '../../common/TextInput';
 class CategoryForm extends React.Component {
   constructor(props, context) {
     super (props, context);
-
     this.state = {
+      categoryId: props.data.categoryId,
       name: props.data.name
     }
   } 
@@ -17,14 +17,26 @@ class CategoryForm extends React.Component {
     data: PropTypes.object,
     saveResult: PropTypes.object
   }
+
+  static getDerivedStateFromProps(nextProps, prevState){
+    if (nextProps.data.categoryId !== prevState.categoryId &&         
+        nextProps.data.name !== prevState.name) {
+      return { 
+        categoryId: nextProps.data.categoryId,
+        name: nextProps.data.name
+      };
+    } 
+    else {
+     return null;
+    } 
+  }
   
   onNameChange = (evt) => {
     if (evt) {
       evt.preventDefault();
     }
     this.setState({
-      ...this.state,
-     name: evt.target.value
+      name: evt.target.value
     });
   }
 
@@ -35,6 +47,12 @@ class CategoryForm extends React.Component {
     let category = {
       name: this.state.name
     };
+
+    // clean state
+    this.setState({
+      categoryId: 0,
+      name: ''
+    });
     this.props.onSave(category);
   }
 
@@ -63,7 +81,7 @@ class CategoryForm extends React.Component {
             placeholder="type category name"
             onChange={this.onNameChange}
             value = {this.state.name}
-            key= {this.props.data.name} />
+            key= {this.state.categoryId} />
           <div className="form-group row">
             <div className="col-8 offset-1">
               <button type="submit" className="btn btn-primary" onClick={this.onClickSave}>Save</button>

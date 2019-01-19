@@ -23,7 +23,9 @@ class ManageCategory extends React.Component {
   }
 
   componentDidMount() {
-    this.props.actions.getCategory(this.state.categoryId);
+    if (this.state.isBeingUpdated) {
+      this.props.actions.getCategory(this.state.categoryId);
+    }
   }
 
   onSave = (category) => {
@@ -32,6 +34,9 @@ class ManageCategory extends React.Component {
     } else {
       this.props.actions.createCategory(category);
     }
+    setTimeout( () => {
+      this.context.router.history.push('/category');
+    }, 1000);
   }
 
   getTitle = () => {
@@ -39,44 +44,41 @@ class ManageCategory extends React.Component {
   }
 
   render () {
-    let categoryData = (this.state.isBeingUpdated) ?
-      this.props.category :
-      {  
-        categoryId: 0,
-        name: '',
-        companies: []
-      };
 
+    let categoryData = this.props.category;
     let saveResult = {
       success: this.props.success,
       errors: this.props.errors
     };
-    
-    if (this.props.isLoading) {
-      return (
-        <div>
-          <i className="fas fa-spinner"></i> Loading ...
-        </div>
-      );
-    } else {
-      return (
-        <div className="container-fluid new-category-form">
-          <div className="row">
-            <div className="col-10 offset-1">
-              <h2>{this.getTitle()}</h2> 
-              <hr />
-            </div>
+
+    return (
+      <div className="container-fluid new-category-form">
+        <div className="row">
+          <div className="col-10 offset-1">
+            <h2>{this.getTitle()}</h2> 
+            <hr />
           </div>
-          <CategoryForm data={categoryData} saveResult={saveResult} onSave={this.onSave} />
         </div>
-      );
-    }   
-  }
+        <CategoryForm data={categoryData} saveResult={saveResult} onSave={this.onSave} />
+      </div>
+    );
+  } 
 }
 
 const mapStateToProps = (state, ownProps) => {
+  const categoryId = ownProps.match.params.id;
+
+  let category =  {  
+    categoryId: 0,
+    name: '',
+    companies: []
+  };
+  if (categoryId > 0) {
+    category = Object.assign({}, state.categoryData.category);
+  } 
+
   return {
-    category: state.categoryData.category,
+    category: category,
     success: state.categoryData.success,
     errors: state.categoryData.errors,
     isLoading: state.categoryData.isLoading,
@@ -89,6 +91,10 @@ const mapDispatchToProps = (dispatch) => {
   return {
     actions: bindActionCreators(categoryActions, dispatch)
   };
+};
+
+ManageCategory.contextTypes = {
+  router: PropTypes.object
 };
 
 export default connect(

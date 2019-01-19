@@ -8,13 +8,15 @@ const initialListState = {
     errors: []
 };
 
+const emptyCateory = {  
+  categoryId: 0,
+  name: '',
+  companies: []
+};
+
 const initialGetState = {  
   isLoading: true,
-  category: {
-    categoryId: 0,
-    name: '',
-    companies: []
-  },
+  category: emptyCateory,
   success: true,
   errors: []
 };
@@ -51,6 +53,7 @@ export const categoryGetReducer = (state = initialGetState, action) => {
     case actionTypes.REQUEST_GET_CATEGORY: {
       return {
         ...state,
+        category: emptyCateory,
         isLoading: true,
         success: true,
         errors: []
@@ -75,6 +78,7 @@ export const categoryActionsReducer = (state = initialActionState, action) => {
     case actionTypes.CREATE_CATEGORY: {
       return {
         ...state,
+        category: emptyCateory,
         success: action.data.success,
         errors: action.data.errors
       };
@@ -82,6 +86,7 @@ export const categoryActionsReducer = (state = initialActionState, action) => {
     case actionTypes.UPDATE_CATEGORY: {
       return {
         ...state,
+        category: emptyCateory,
         success: action.data.success,
         errors: action.data.errors
       };
@@ -89,6 +94,7 @@ export const categoryActionsReducer = (state = initialActionState, action) => {
     case actionTypes.DELETE_CATEGORY: {
       return {
         ...state,
+        category: emptyCateory,
         success: action.data.success,
         errors: action.data.errors
       };

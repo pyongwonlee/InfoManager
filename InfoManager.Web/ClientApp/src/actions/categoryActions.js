@@ -10,7 +10,7 @@ const categoryActions = {
 
       categroyService.getCategories()
         .then(response => {
-          dispatch({ 
+          dispatch({
             type: actionTypes.RECEIVE_LOAD_CATEGORIES, 
             data: response.data 
           });
@@ -26,29 +26,16 @@ const categoryActions = {
         type: actionTypes.REQUEST_GET_CATEGORY
       });
 
-      if (id > 0) {    
-        categroyService.getCategory(id)
-          .then(response => {
-            dispatch({ 
-              type: actionTypes.RECEIVE_GET_CATEGORY, 
-              data: response.data
-            });
-          }).catch (error => {
-            console.error(error);
+      categroyService.getCategory(id)
+        .then(response => {
+          dispatch({
+            type: actionTypes.RECEIVE_GET_CATEGORY, 
+            data: response.data
           });
-      } else {
-        dispatch({ 
-          type: actionTypes.RECEIVE_GET_CATEGORY, 
-          data: {
-            item: {
-              categoryId: 0,
-              name: '',
-              companies: []  
-            }
-          }
+        }).catch (error => {
+          console.error(error);
         });
-      }
-    };
+    }
   },
 
   createCategory: (category) => {
