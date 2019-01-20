@@ -12,6 +12,7 @@ import './index.css';
 import 'jquery/dist/jquery.js';
 import 'popper.js/dist/esm/popper.js';
 import 'bootstrap/dist/js/bootstrap.js';
+import 'toastr/build/toastr.min.css';
 
 import initialState from './store/initialState';
 

@@ -4,34 +4,25 @@ const initialState = {
   },
   categoryList: {    
     totalCount: 0,
-    categories: [],
-    success: true,
-    errors: []
+    categories: []
   },
   categoryData: {    
     category: {  
       categoryId: 0,
       name: '',
       companies: []
-    },
-    success: true,
-    errors: []
+    }
   },
   categoryActions: { 
-    success: true,
-    errors: []
+    done: false
   },
   directorList: {
     totalCount: 0,
     directors: [],
-    success: true,
-    errors: []
   }, 
   companyList: {    
     totalCount: 0,
     companies: [],
-    success: true,
-    errors: []
   }
 };
 

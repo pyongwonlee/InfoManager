@@ -40,75 +40,51 @@ const categoryActions = {
 
   createCategory: (category) => {
     return (dispatch, getState) => { 
-      dispatch(beginAsynAction());
-
       return categroyService.createCategory(category)
         .then(response => {
           dispatch({
-            type: actionTypes.CREATE_CATEGORY_SUCCESS,
-            data: {
-              success: true,
-              errors: []
-            }
+            type: actionTypes.CREATE_CATEGORY
           });
         }).catch (error => {
-          dispatch({
-            type: actionTypes.CREATE_CATEGORY_SUCCESS,
-            data: {
-              success: false,
-              errors: ['Cannot create the category']
-            }
-          });
+          if(error.response.data && error.response.data.errors){
+            throw new Error(error.response.data.errors[0]);
+          } else {
+            throw new Error('Cannot create a category.');
+          }
         });
     };
   },
 
   updateCategory: (id, category) => {
-    return (dispatch, getState) => { 
-      dispatch(beginAsynAction());
-      
+    return (dispatch, getState) => {       
       return categroyService.updateCategory(id, category)
         .then(response => {
           dispatch({
-            type: actionTypes.UPDATE_CATEGORY_SUCCESS,
-            data: {
-              success: true,
-              errors: []
-            }
+            type: actionTypes.UPDATE_CATEGORY
           });
         }).catch (error => {
-          dispatch({
-            type: actionTypes.UPDATE_CATEGORY_SUCCESS,
-            data: {
-              success: false,
-              errors: ['Cannot update the category']
-            }
-          });
+          if(error.response.data && error.response.data.errors){
+            throw new Error(error.response.data.errors[0]);
+          } else {
+            throw new Error('Cannot create a category.');
+          }
         });
     };
   },
 
   deleteCategory: (id) => {
-    return (dispatch, getState) => { 
-      dispatch(beginAsynAction());
-      
+    return (dispatch, getState) => {       
       return categroyService.deleteCategory(id)
         .then(response => {
           dispatch({
-            type: actionTypes.DELETE_CATEGORY_SUCCESS,
-            data: {
-              success: true,
-              errors: []
-            }
+            type: actionTypes.DELETE_CATEGORY
           });
         }).catch (error => {
-          dispatch({
-            type: actionTypes.DELETE_CATEGORY_SUCCESS,
-            data: {
-              success: false,
-              errors: ['Cannot delete the category']
-            }
-          });
+          if(error.response.data && error.response.data.errors){
+            throw new Error(error.response.data.errors[0]);
+          } else {
+            throw new Error('Cannot create a category.');
+          }
         });
     };
   }

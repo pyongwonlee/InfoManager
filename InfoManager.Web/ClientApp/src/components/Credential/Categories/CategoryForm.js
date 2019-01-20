@@ -15,7 +15,7 @@ class CategoryForm extends React.Component {
   static propTypes = {
     onSave: PropTypes.func.isRequired,
     data: PropTypes.object,
-    saveResult: PropTypes.object
+    saving: PropTypes.bool.isRequired
   }
 
   static getDerivedStateFromProps(nextProps, prevState){
@@ -50,26 +50,9 @@ class CategoryForm extends React.Component {
     this.props.onSave(category);
   }
 
-  displayErrors = () => {
-    if (!this.props.saveResult.success) {
-      return (
-        <div className="alert alert-warning">
-          <ul>
-            {this.props.saveResult.errors.map((error, index) => {
-              return (
-                <li key={index}>{error}</li>
-              );
-            })}
-          </ul>
-        </div>
-      );    
-    } 
-  }
-
   render() {
     return (
       <div>
-        {this.displayErrors()}
         <form>
           <TextInput name="inputCategory" label="Name:" 
             placeholder="type category name"
@@ -78,7 +61,9 @@ class CategoryForm extends React.Component {
             key= {this.state.categoryId} />
           <div className="form-group row">
             <div className="col-8 offset-1">
-              <button type="submit" className="btn btn-primary" onClick={this.onClickSave}>Save</button>
+              <button type="submit" disabled={this.props.saving} className="btn btn-primary" onClick={this.onClickSave}>
+                {this.props.saving ? 'Saving ...' : 'Save'}
+              </button>
               <Link to="/category" className="btn btn-info" style={{marginLeft: '20px'}}>Cancel</Link>
             </div>
           </div>

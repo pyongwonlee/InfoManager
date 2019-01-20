@@ -4,13 +4,15 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import CategoryForm from './CategoryForm';
 import categoryActions from '../../../actions/categoryActions'
+import toastr from 'toastr';
 
 class ManageCategory extends React.Component {
   constructor(props, context) {
     super (props, context);
     this.state = {
       categoryId: this.props.match.params.id,
-      isBeingUpdated: this.props.match.params.id > 0
+      isBeingUpdated: this.props.match.params.id > 0,
+      saving: false
     }
   }
 
@@ -29,18 +31,25 @@ class ManageCategory extends React.Component {
   }
 
   handleResult = () => {
-    if (this.props.actionSuccess) {
-      this.context.router.history.push('/category');
-    } 
+    this.setState({saving: false});
+    toastr.success('The Category has been saved.');
+    this.context.router.history.push('/category');
   };
+  handleError = (error) => {    
+    this.setState({saving: false});
+    toastr.error(error.message);
+  }
 
   onSave = (category) => {
+    this.setState({saving: true});
     if (this.state.isBeingUpdated) {
       this.props.actions.updateCategory(this.state.categoryId, category)
         .then(() => this.handleResult())
+        .catch(error => this.handleError(error));
     } else {
       this.props.actions.createCategory(category)
-        .then(() => this.handleResult());
+        .then(() => this.handleResult())
+        .catch(error => this.handleError(error));      
     }
   }
 
@@ -51,10 +60,6 @@ class ManageCategory extends React.Component {
   render () {
 
     let categoryData = this.props.category;
-    let saveResult = {
-      success: this.props.success,
-      errors: this.props.errors
-    };
 
     return (
       <div className="container-fluid new-category-form">
@@ -64,7 +69,7 @@ class ManageCategory extends React.Component {
             <hr />
           </div>
         </div>
-        <CategoryForm data={categoryData} saveResult={saveResult} onSave={this.onSave} />
+        <CategoryForm data={categoryData} onSave={this.onSave} saving={this.state.saving} />
       </div>
     );
   } 
@@ -84,10 +89,6 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     category: category,
-    success: state.categoryData.success,
-    errors: state.categoryData.errors,
-    actionSuccess: state.categoryActions.success,
-    actionErrors: state.categoryActions.errors
   };
 };
 

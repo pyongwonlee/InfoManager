@@ -36,76 +36,52 @@ const companyActions = {
   },
 
   createCompany: (company) => {
-    return (dispatch, getState) => { 
-      dispatch(beginAsynAction());
-      
+    return (dispatch, getState) => {       
       return companyService.createCompany(company)
         .then(response => {
           dispatch({
-            type: actionTypes.CREATE_COMPANY_SUCCESS,
-            data: {
-              success: true,
-              errors: []
-            }
+            type: actionTypes.CREATE_COMPANY
           });
         }).catch (error => {
-          dispatch({
-            type: actionTypes.CREATE_COMPANY_SUCCESS,
-            data: {
-              success: false,
-              errors: ['Cannot create the company']
-            }
-          });
+          if(error.response.data && error.response.data.errors){
+            throw new Error(error.response.data.errors[0]);
+          } else {
+            throw new Error('Cannot create a category.');
+          }
         });
     };
   },
 
   updateCompany: (id, company) => {
     return (dispatch, getState) => { 
-      dispatch(beginAsynAction());
-      
       return companyService.updateCompany(id, company)
         .then(response => {
           dispatch({
-            type: actionTypes.UPDATE_COMPANY_SUCCESS,
-            data: {
-              success: true,
-              errors: []
-            }
+            type: actionTypes.UPDATE_COMPANY
           });
         }).catch (error => {
-          dispatch({
-            type: actionTypes.UPDATE_COMPANY_SUCCESS,
-            data: {
-              success: false,
-              errors: ['Cannot update the company']
-            }
-          });
+          if(error.response.data && error.response.data.errors){
+            throw new Error(error.response.data.errors[0]);
+          } else {
+            throw new Error('Cannot create a category.');
+          }
         });
     };
   },
 
   deleteCompany: (id) => {
-    return (dispatch, getState) => { 
-      dispatch(beginAsynAction());
-      
+    return (dispatch, getState) => {       
       return companyService.deleteCompany(id)
         .then(response => {
           dispatch({
-            type: actionTypes.DELETE_COMPANY_SUCCESS,
-            data: {
-              success: true,
-              errors: []
-            }
+            type: actionTypes.DELETE_COMPANY
           });
         }).catch (error => {
-          dispatch({
-            type: actionTypes.DELETE_COMPANY_SUCCESS,
-            data: {
-              success: false,
-              errors: ['Cannot delete the company']
-            }
-          });
+          if(error.response.data && error.response.data.errors){
+            throw new Error(error.response.data.errors[0]);
+          } else {
+            throw new Error('Cannot create a category.');
+          }
         });
     };
   }

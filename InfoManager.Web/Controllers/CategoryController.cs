@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using InfoManager.DataAccess.Contract.Credentials;
 using InfoManager.DataAccess.Models;
+using InfoManager.Web.Helpers;
 using InfoManager.Web.Models;
 using InfoManager.Web.Models.Credentials;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +13,7 @@ namespace InfoManager.Web.Controllers
 {
     [ApiController]
     [Route("api/categories")]
+    [ValidationHandle]
     public class CategoryController : ControllerBase
     {
         private ICategoryRepository repository;
@@ -59,11 +61,6 @@ namespace InfoManager.Web.Controllers
                 return BadRequest(ResultBase.ErrorResult("Category is null")); // 400
             }
 
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ResultBase.ErrorResult(ModelState));  // 400
-            }
-
             var categoryData = Mapper.Map<Category>(category);
             if (repository.Exists(categoryData.Name))
             {
@@ -99,11 +96,6 @@ namespace InfoManager.Web.Controllers
             if (category == null)
             {
                 return BadRequest(ResultBase.ErrorResult("Category is null")); // 400
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ResultBase.ErrorResult(ModelState));  // 400
             }
 
             if (this.repository.Find(id) == null)

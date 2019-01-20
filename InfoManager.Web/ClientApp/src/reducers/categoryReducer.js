@@ -13,9 +13,7 @@ export const categoryListReducer = (state = initialState, action) => {
       return {
         ...state,
         totalCount: action.data.totalCount,
-        categories: action.data.items,
-        success: true,
-        errors: []
+        categories: action.data.items
       };
     }
     default:
@@ -28,17 +26,13 @@ export const categoryGetReducer = (state = initialState, action) => {
     case actionTypes.GET_CATEGORY_BEGIN: {
       return {
         ...state,
-        category: emptyCateory,
-        success: true,
-        errors: []
+        category: emptyCateory
       };
     }
     case actionTypes.GET_CATEGORY_SUCCESS: {
       return {
         ...state,
-        category: action.data.item,
-        success: true,
-        errors: []
+        category: action.data.item
       };
     }
     default:
@@ -48,25 +42,19 @@ export const categoryGetReducer = (state = initialState, action) => {
 
 export const categoryActionsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case actionTypes.CREATE_CATEGORY_SUCCESS: {
+    case actionTypes.CREATE_CATEGORY: {
       return {
-        ...state,
-        success: action.data.success,
-        errors: action.data.errors
+        ...state
       };
     }
-    case actionTypes.UPDATE_CATEGORY_SUCCESS: {
+    case actionTypes.UPDATE_CATEGORY: {
       return {
-        ...state,
-        success: action.data.success,
-        errors: action.data.errors
+        ...state
       };
     } 
-    case actionTypes.DELETE_CATEGORY_SUCCESS: {
+    case actionTypes.DELETE_CATEGORY: {
       return {
-        ...state,
-        success: action.data.success,
-        errors: action.data.errors
+        ...state
       };
     } 
     default:
