@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import CategoryForm from './CategoryForm';
-import categoryActions from '../../../actions/categoryActions'
+import categoryActions from '../../../actions/categoryActions';
 import toastr from 'toastr';
 
 class ManageCategory extends React.Component {
@@ -13,7 +13,7 @@ class ManageCategory extends React.Component {
       categoryId: this.props.match.params.id,
       isBeingUpdated: this.props.match.params.id > 0,
       saving: false
-    }
+    };
   }
 
   static propTypes = {
@@ -54,7 +54,7 @@ class ManageCategory extends React.Component {
   }
 
   getTitle = () => {
-    return (this.state.isBeingUpdated) ? `Edit Category: ${this.props.category.name}` : "Create Category";
+    return (this.state.isBeingUpdated) ? `Edit Category: ${this.props.category.name}` : 'Create Category';
   }
 
   render () {

@@ -3,7 +3,7 @@ import { Route, BrowserRouter, Switch } from 'react-router-dom';
 import Layout from './components/Layout';
 import HomePage from './components/Home/HomePage';
 import AboutPage from './components/About/AboutPage';
-import CompanyList from './components/Credential/Companies/CompanyList'
+import CompanyList from './components/Credential/Companies/CompanyList';
 import CategoryList from './components/Credential/Categories/CategoryList';
 import ManageCategory from './components/Credential/Categories/ManageCategory';
 import DirectorList from './components/Film/Directors/DirectorList';

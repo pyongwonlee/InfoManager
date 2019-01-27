@@ -20,7 +20,7 @@ const categoryActions = {
   },
 
   getCategory: (id) => {
-    return (dispatch, getState) => {
+    return (dispatch) => {
       dispatch(beginAsynAction());
       dispatch ({
         type: actionTypes.GET_CATEGORY_BEGIN
@@ -35,11 +35,11 @@ const categoryActions = {
         }).catch (error => {
           console.error(error);
         });
-    }
+    };
   },
 
   createCategory: (category) => {
-    return (dispatch, getState) => { 
+    return (dispatch) => { 
       return categroyService.createCategory(category)
         .then(response => {
           dispatch({
@@ -56,7 +56,7 @@ const categoryActions = {
   },
 
   updateCategory: (id, category) => {
-    return (dispatch, getState) => {       
+    return (dispatch) => {       
       return categroyService.updateCategory(id, category)
         .then(response => {
           dispatch({
@@ -73,7 +73,7 @@ const categoryActions = {
   },
 
   deleteCategory: (id) => {
-    return (dispatch, getState) => {       
+    return (dispatch) => {       
       return categroyService.deleteCategory(id)
         .then(response => {
           dispatch({

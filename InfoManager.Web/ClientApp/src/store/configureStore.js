@@ -20,4 +20,4 @@ export default function configureStore(initialState) {
     initialState,
     compose(applyMiddleware(...middleware), ...enhancers)
   );
-};
+}

@@ -9,7 +9,7 @@ class CategoryForm extends React.Component {
     this.state = {
       categoryId: props.data.categoryId,
       name: props.data.name
-    }
+    };
   } 
 
   static propTypes = {
@@ -26,9 +26,8 @@ class CategoryForm extends React.Component {
         name: nextProps.data.name
       };
     } 
-    else {
-     return null;
-    } 
+
+    return null; 
   }
   
   onNameChange = (evt) => {

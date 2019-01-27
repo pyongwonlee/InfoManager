@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import DirectorRow from './DirectorRow';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import directorActions from '../../../actions/directorActions'
+import directorActions from '../../../actions/directorActions';
 
-class DirectorList extends React.Component {
+export class DirectorList extends React.Component {
 
   static propTypes = {
     totalCount: PropTypes.number.isRequired,
@@ -35,16 +35,17 @@ class DirectorList extends React.Component {
           </div>
           <div className="col-5">
             <form className="form-inline">
-              <div className="text-right" style={{width:"100%"}}>
+              <div className="text-right" style={{width:'100%'}}>
                 <input name="searchTerm" className="form-control searchTerm" type="search" />
                 <button className="btn btn-info searchBtn" type="submit"><i className="fa fa-search"></i></button>
               </div>
             </form>
           </div>
         </div>
-          { directors.map((director, index) => 
-              <DirectorRow director={director} key={index} />)
-          }
+        { 
+          directors.map((director, index) => 
+            <DirectorRow director={director} key={index} />)
+        }
       </div>  
     );
   }

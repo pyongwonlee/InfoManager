@@ -4,7 +4,7 @@ import CompanyRow from './CompanyRow';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import companyActions from '../../../actions/companyActions'
+import companyActions from '../../../actions/companyActions';
 
 class CompanyList extends React.Component {
 
@@ -34,7 +34,8 @@ class CompanyList extends React.Component {
             <Link className="btn btn-primary" to="/company/0">Create a New Company</Link>
           </div>
         </div>
-        { companies.map((company, index) =>
+        { 
+          companies.map((company, index) =>
             <CompanyRow company={company} key={index} />)
         }
       </div>  

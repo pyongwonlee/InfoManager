@@ -1,6 +1,6 @@
 import React from 'react';
-import authService from "../../services/authService";
-import { Redirect } from "react-router-dom";
+import authService from '../../services/authService';
+import { Redirect } from 'react-router-dom';
 
 class Login extends React.Component {
 
@@ -43,15 +43,15 @@ class Login extends React.Component {
           </div>
         </form>
       </div>
-        );
-    };
+    );
+  };
 
-    login = () => {
-      authService.signIn(() => {
-        this.setState({
-          loggedIn: authService.isAuthenticated()
-        })
-      })
+  login = () => {
+    authService.signIn(() => {
+      this.setState({
+        loggedIn: authService.isAuthenticated()
+      });
+    });
   };
 }
 

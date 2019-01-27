@@ -6,14 +6,14 @@ const Layout = (props) => {
   return(
     <div className="container-fluid"> 
       <NavMenu />
-      <div className="mainArea" style={{marginTop: "30px"}}>
+      <div className="mainArea" style={{marginTop: '30px'}}>
         {props.children}
         <hr />
         <p>&copy; {new Date().getFullYear()} - Personal Information Management by P. Lee</p>
       </div>
     </div>
   );
-}
+};
 
 Layout.propTypes = {
   children: PropTypes.object.isRequired

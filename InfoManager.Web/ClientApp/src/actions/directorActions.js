@@ -16,7 +16,7 @@ const directorActions = {
         }).catch (error => {
           console.error(error);
         });
-    }
+    };
   }
 };
 

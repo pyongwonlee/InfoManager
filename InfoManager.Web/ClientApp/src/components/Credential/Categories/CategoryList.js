@@ -4,7 +4,7 @@ import CategoryRow from './CategoryRow';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import categoryActions from '../../../actions/categoryActions'
+import categoryActions from '../../../actions/categoryActions';
 
 class CategoryList extends React.Component {
 
@@ -35,7 +35,8 @@ class CategoryList extends React.Component {
             <Link className="btn btn-primary" to="/category/0">Create a New Category</Link>
           </div>
         </div>
-        { categories.map((category, index) =>
+        { 
+          categories.map((category, index) =>
             <CategoryRow category={category} key={index} />)
         }
       </div>  

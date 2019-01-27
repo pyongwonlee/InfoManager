@@ -20,7 +20,7 @@ const companyActions = {
   },
 
   getCompany: (id) => {
-    return (dispatch, getState) => {  
+    return (dispatch) => {  
       dispatch(beginAsynAction());
 
       return companyService.getCompany(id)
@@ -36,7 +36,7 @@ const companyActions = {
   },
 
   createCompany: (company) => {
-    return (dispatch, getState) => {       
+    return (dispatch) => {       
       return companyService.createCompany(company)
         .then(response => {
           dispatch({
@@ -53,7 +53,7 @@ const companyActions = {
   },
 
   updateCompany: (id, company) => {
-    return (dispatch, getState) => { 
+    return (dispatch) => { 
       return companyService.updateCompany(id, company)
         .then(response => {
           dispatch({
@@ -70,7 +70,7 @@ const companyActions = {
   },
 
   deleteCompany: (id) => {
-    return (dispatch, getState) => {       
+    return (dispatch) => {       
       return companyService.deleteCompany(id)
         .then(response => {
           dispatch({

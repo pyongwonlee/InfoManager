@@ -7,13 +7,13 @@ class LoadingProgress extends React.Component {
 
     this.state = {
       frame: 1
-    }
+    };
   }
 
   static propTypes = {
     interval: PropTypes.number,
     dots: PropTypes.number
-  }
+  };
 
   static defaultProps = {
     interval: 300,
@@ -25,7 +25,7 @@ class LoadingProgress extends React.Component {
       this.setState({
         frame: this.state.frame + 1
       })
-      , this.props.interval);
+    , this.props.interval);
   }
 
   componentWillUnmount() {

@@ -9,12 +9,13 @@ const SelectInput = ({name, reference, options, label}) => {
         <select className="form-control" 
           name={name} id={name}
           ref={reference}>
-            {options.map((option, index) => {
+          {
+            options.map((option, index) => {
               return (
                 <option key={index} value={option.value}>{option.text}</option>
               );
-              }
-            )}
+            })
+          }
         </select>
       </div>
     </div>

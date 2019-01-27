@@ -19,7 +19,7 @@ export const categoryListReducer = (state = initialState, action) => {
     default:
       return state;
   }
-}
+};
 
 export const categoryGetReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -38,7 +38,7 @@ export const categoryGetReducer = (state = initialState, action) => {
     default:
       return state;
   }
-}
+};
 
 export const categoryActionsReducer = (state = initialState, action) => {
   switch (action.type) {

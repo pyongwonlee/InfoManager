@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect } from "react-router-dom";
+import { Redirect } from 'react-router-dom';
 import authService from '../../services/authService';
 
 class Logout extends React.Component {
@@ -10,7 +10,7 @@ class Logout extends React.Component {
 
   render = () => {
     return (
-     <Redirect to={'/'}/>
+      <Redirect to={'/'}/>
     );
   }
 }
