@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InfoManager.Web", "InfoManager.Web\InfoManager.Web.csproj", "{FC043EDD-7662-40C8-80BD-9EE3052CF80B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfoManager.DataAccess", "InfoManager.DataAccess\InfoManager.DataAccess.csproj", "{9C3A0D58-99AE-4D1D-85BA-21C83799E1DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InfoManager.DataAccess", "InfoManager.DataAccess\InfoManager.DataAccess.csproj", "{9C3A0D58-99AE-4D1D-85BA-21C83799E1DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using InfoManager.DataAccess.Contract.Credentials;
 using InfoManager.DataAccess.Models;
+using InfoManager.Web.Helpers;
 using InfoManager.Web.Models;
 using InfoManager.Web.Models.Credentials;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +13,7 @@ namespace InfoManager.Web.Controllers
 {
     [ApiController]
     [Route("api/companies")]
+    [ValidationHandle]
     public class CompanyController : ControllerBase
     {
         private ICategoryRepository categoryRepository;
@@ -40,21 +42,6 @@ namespace InfoManager.Web.Controllers
             };
 
             return Ok(model); // 200
-        }
-
-        [HttpGet("create")]
-        public IActionResult Create()
-        {
-            var model = new DataResult<CompanyResult>
-            {
-                Success = true,
-                Item = new CompanyResult()
-                {
-                    Name = string.Empty,
-                    CategoryName = string.Empty
-                }
-            };
-            return Ok(model);
         }
 
         [HttpPost]
@@ -130,25 +117,19 @@ namespace InfoManager.Web.Controllers
 
             var companyData = Mapper.Map<Company>(company);
             companyData.CompanyId = id;
+
+            if (repository.Exists(companyData.Name, id))
+            {
+                return new StatusCodeResult(StatusCodes.Status409Conflict); // 409: already exists
+            }
+
             this.repository.Update(companyData);
 
             return Ok(companyData);
         }
 
-        [HttpGet("delete")]
-        public IActionResult Delete(int id)
-        {
-            var category = this.repository.Find(id);
-            if (category == null)
-            {
-                return NotFound(); // 404
-            }
-
-            return Ok(category);
-        }
-
         [HttpDelete("{id}")]
-        public IActionResult DeleteConfirm(int id)
+        public IActionResult Delete(int id)
         {
             if (this.repository.Find(id) == null)
             {

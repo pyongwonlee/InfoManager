@@ -38,21 +38,6 @@ namespace InfoManager.Web.Controllers
             return Ok(model); // 200
         }
 
-        [HttpGet("create")]
-        public IActionResult Create()
-        {
-            var model = new DataResult<CategoryResult>
-            {
-                Success = true,
-                Item = new CategoryResult()
-                    {
-                        Name = string.Empty,
-                        Companies = new CategoryResult.Company[] { }
-                    }
-            };
-            return Ok(model);
-        }
-
         [HttpPost]
         public IActionResult Create([FromBody]CategoryArgument category)
         {
@@ -62,6 +47,7 @@ namespace InfoManager.Web.Controllers
             }
 
             var categoryData = Mapper.Map<Category>(category);
+
             if (repository.Exists(categoryData.Name))
             {
                 return new StatusCodeResult(StatusCodes.Status409Conflict); // 409: already exists
@@ -105,25 +91,19 @@ namespace InfoManager.Web.Controllers
 
             var categoryData = Mapper.Map<Category>(category);
             categoryData.CategoryId = id;
+
+            if (repository.Exists(categoryData.Name, id))
+            {
+                return new StatusCodeResult(StatusCodes.Status409Conflict); // 409: already exists
+            }
+
             this.repository.Update(categoryData);
 
             return Ok(categoryData);
         }
 
-        [HttpGet("delete")]
-        public IActionResult Delete(int id)
-        {
-            var category = this.repository.Find(id);
-            if (category == null)
-            {
-                return NotFound(); // 404
-            }
-
-            return Ok(category);
-        }
-
         [HttpDelete("{id}")]
-        public IActionResult DeleteConfirm(int id)
+        public IActionResult Delete(int id)
         {
             if (this.repository.Find(id) == null)
             {

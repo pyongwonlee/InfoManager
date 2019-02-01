@@ -43,6 +43,10 @@ namespace InfoManager.DataAccess.Concrete.Books
             this.context.Books
                 .Where(b => b.Author == author && b.Title == title).Any();
 
+        public bool Exists(string author, string title, int ownId) =>
+            this.context.Books
+                .Where(b => b.Author == author && b.Title == title && b.BookId != ownId).Any();
+
         public bool Exists(int id) =>
             this.context.Books.Find(id) != null;
 

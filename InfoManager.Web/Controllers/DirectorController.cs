@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using InfoManager.DataAccess.Contract.Movies;
 using InfoManager.DataAccess.Models;
+using InfoManager.Web.Helpers;
 using InfoManager.Web.Models;
 using InfoManager.Web.Models.Movies;
 using Microsoft.AspNetCore.Http;
@@ -12,6 +13,7 @@ namespace InfoManager.Web.Controllers
 {
     [ApiController]
     [Route("api/directors")]
+    [ValidationHandle]
     public class DirectorController : ControllerBase
     {
         private IDirectorRepository repository;
@@ -44,22 +46,6 @@ namespace InfoManager.Web.Controllers
         {
             int page = 1;
             return GetDirectors(page, searchTerm);
-        }
-
-        [HttpGet("create")]
-        public IActionResult Create()
-        {
-            var model = new DataResult<DirectorResult>
-            {
-                Success = true,
-                Item = new DirectorResult
-                {
-                    Id = 0,
-                    Name = string.Empty,
-                    Movies = new DirectorResult.Movie[] { }
-                }
-            };
-            return Ok(model);
         }
 
         [HttpPost]
@@ -124,25 +110,19 @@ namespace InfoManager.Web.Controllers
 
             var directorData = Mapper.Map<Director>(director);
             directorData.Id = id;
+
+            if (repository.Exists(directorData.Name, id))
+            {
+                return new StatusCodeResult(StatusCodes.Status409Conflict); // 409: already exists
+            }
+
             this.repository.Update(directorData);
 
             return Ok(directorData);
         }
 
-        [HttpGet("delete")]
-        public IActionResult Delete(int id)
-        {
-            var director = this.repository.Find(id);
-            if (director == null)
-            {
-                return NotFound(); // 404
-            }
-
-            return Ok(director);
-        }
-
         [HttpDelete("{id}")]
-        public IActionResult DeleteConfirm(int id)
+        public IActionResult Delete(int id)
         {
             if (this.repository.Find(id) == null)
             {

@@ -11,5 +11,6 @@ namespace InfoManager.DataAccess.Contract.Credentials
         int GetCategoryId(string name);
 
         bool Exists(string name);
+        bool Exists(string name, int ownId);
     }
 }

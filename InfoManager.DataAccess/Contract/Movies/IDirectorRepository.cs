@@ -10,6 +10,6 @@ namespace InfoManager.DataAccess.Contract.Movies
         IEnumerable<Director> GetDirectorsInPage(string searchTerm, int page, int pageSize);
 
         bool Exists(string name);
-        bool Exists(string name, int currentId);
+        bool Exists(string name, int ownId);
     }
 }

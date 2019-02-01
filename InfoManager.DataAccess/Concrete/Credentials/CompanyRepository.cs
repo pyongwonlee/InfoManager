@@ -68,6 +68,9 @@ namespace InfoManager.DataAccess.Concrete.Credentials
         public bool Exists(string name) => this.context.Companies
             .Where(d => d.Name == name).Any();
 
+        public bool Exists(string name, int ownId) => this.context.Companies
+            .Where(d => d.Name == name && d.CategoryId != ownId).Any();
+
         public bool Exists(int id) =>
             this.context.Companies.Find(id) != null;
 

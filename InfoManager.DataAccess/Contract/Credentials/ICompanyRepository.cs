@@ -12,5 +12,6 @@ namespace InfoManager.DataAccess.Contract.Credentials
         IEnumerable<Company> GetCompaniesInPage(string searchTerm, int page, int pageSize);
 
         bool Exists(string name);
+        bool Exists(string name, int ownId);
     }
 }

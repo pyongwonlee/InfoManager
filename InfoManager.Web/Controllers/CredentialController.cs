@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using InfoManager.DataAccess.Contract.Credentials;
+using InfoManager.Web.Helpers;
 using InfoManager.Web.Models;
 using InfoManager.Web.Models.Credentials;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using System.Linq;
 namespace InfoManager.Web.Controllers
 {
     [ApiController]
+    [ValidationHandle]
     public class CredentialController : ControllerBase
     {
         private ICategoryRepository categoryRepository;

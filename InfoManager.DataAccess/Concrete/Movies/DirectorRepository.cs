@@ -50,9 +50,9 @@ namespace InfoManager.DataAccess.Concrete.Movies
             this.context.Directors
                 .Where(d => d.Name == name).Any();
 
-        public bool Exists(string name, int currentId) =>
+        public bool Exists(string name, int ownId) =>
             this.context.Directors
-                .Where(d => d.Name == name && d.Id != currentId).Any();
+                .Where(d => d.Name == name && d.Id != ownId).Any();
 
         public bool Exists(int id) =>
             this.context.Directors.Find(id) != null;

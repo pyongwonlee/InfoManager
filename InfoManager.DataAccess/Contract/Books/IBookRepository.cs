@@ -10,5 +10,6 @@ namespace InfoManager.DataAccess.Contract.Books
         IEnumerable<Book> GetBooksInPage(string searchTerm, int page, int pageSize);
 
         bool Exists(string author, string title);
+        bool Exists(string author, string title, int ownId);
     }
 }

@@ -48,6 +48,8 @@ const categoryActions = {
         }).catch (error => {
           if(error.response.data && error.response.data.errors){
             throw new Error(error.response.data.errors[0]);
+          } else if (error.response.status === 409) {
+            throw new Error('Conflict: the category with the same name already exists.');
           } else {
             throw new Error('Cannot create a category.');
           }
@@ -65,8 +67,12 @@ const categoryActions = {
         }).catch (error => {
           if(error.response.data && error.response.data.errors){
             throw new Error(error.response.data.errors[0]);
+          } else if (error.response.status === 404) {
+            throw new Error('The current category does not exist any more.');
+          } else if (error.response.status === 409) {
+            throw new Error('Conflict: the category with the same name already exists.');
           } else {
-            throw new Error('Cannot create a category.');
+            throw new Error('Cannot update a category.');
           }
         });
     };

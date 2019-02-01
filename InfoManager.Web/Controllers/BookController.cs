@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using InfoManager.DataAccess.Contract.Books;
 using InfoManager.DataAccess.Models;
+using InfoManager.Web.Helpers;
 using InfoManager.Web.Models;
 using InfoManager.Web.Models.Books;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +12,7 @@ namespace InfoManager.Web.Controllers
 {
     [ApiController]
     [Route("api/books")]
+    [ValidationHandle]
     public class BookController : ControllerBase
     {
         private IBookRepository repository;
@@ -50,17 +52,6 @@ namespace InfoManager.Web.Controllers
         {
             int page = 1;
             return GetBooks(page, searchTerm);
-        }
-
-        [HttpGet("create")]
-        public IActionResult Create()
-        {
-            var model = new DataResult<BookResult>
-            {
-                Success = true,
-                Item = new BookResult() { Year = 2000 }
-            };
-            return Ok(model);
         }
 
         [HttpPost]
@@ -125,25 +116,19 @@ namespace InfoManager.Web.Controllers
 
             var bookData = Mapper.Map<Book>(book);
             bookData.BookId = id;
+
+            if (repository.Exists(bookData.Author, bookData.Title, id))
+            {
+                return new StatusCodeResult(StatusCodes.Status409Conflict); // 409: already exists
+            }
+
             this.repository.Update(bookData);
 
             return Ok(bookData);
         }
 
-        [HttpGet("delete")]
-        public IActionResult Delete(int id)
-        {
-            var book = this.repository.Find(id);
-            if (book == null)
-            {
-                return NotFound(); // 404
-            }
-
-            return Ok(book);
-        }
-
         [HttpDelete("{id}")]
-        public IActionResult DeleteConfirm(int id)
+        public IActionResult Delete(int id)
         {
             if (this.repository.Find(id) == null)
             {
