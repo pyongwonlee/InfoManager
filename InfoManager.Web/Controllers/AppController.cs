@@ -14,7 +14,7 @@ namespace InfoManager.Web.Controllers
             this.Configuration = config;
         }
 
-        [HttpGet]
+        [HttpGet("info")]
         public IActionResult Info()
         {
             var version 
